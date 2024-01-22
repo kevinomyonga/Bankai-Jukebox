@@ -1,4 +1,4 @@
-# Jukebox-Bankai
+# Bankai-Jukebox
  Virtual Jukebox Simulation Project By The Bankai Group. For The MIS6030 Class.
 
  ## Group Members
