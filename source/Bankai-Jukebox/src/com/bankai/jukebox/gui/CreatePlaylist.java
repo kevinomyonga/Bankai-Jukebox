@@ -4,6 +4,11 @@ import javax.swing.*;
 
 public class CreatePlaylist {
     private JPanel rootPanel;
+    private JTextField txtTrackNumber;
+    private JButton btnAddTrack;
+    private JButton btnPlay;
+    private JButton btnResetPlaylist;
+    private JTable tablePlaylist;
 
     public CreatePlaylist() {
     }
