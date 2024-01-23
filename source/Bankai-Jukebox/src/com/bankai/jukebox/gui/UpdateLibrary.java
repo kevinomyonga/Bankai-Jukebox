@@ -4,6 +4,10 @@ import javax.swing.*;
 
 public class UpdateLibrary {
     private JPanel rootPanel;
+    private JTextField txtTrackNumber;
+    private JTextField txtTrackRating;
+    private JTable tableLibraryTracks;
+    private JButton btnUpdate;
 
     public UpdateLibrary() {
     }
