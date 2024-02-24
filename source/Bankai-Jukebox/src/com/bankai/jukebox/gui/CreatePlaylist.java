@@ -8,7 +8,7 @@ public class CreatePlaylist {
     private JButton btnAddTrack;
     private JButton btnPlay;
     private JButton btnResetPlaylist;
-    private JTable tablePlaylist;
+    private JList list1;
 
     public CreatePlaylist() {
     }

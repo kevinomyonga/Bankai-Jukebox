@@ -60,9 +60,15 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="8e555" class="javax.swing.JTable" binding="tablePlaylist">
+          <component id="afaab" class="javax.swing.JList" binding="list1" default-binding="true">
             <constraints/>
-            <properties/>
+            <properties>
+              <model>
+                <item value="Zen State of Mind"/>
+                <item value="Shazam Tracks"/>
+                <item value="Reggae"/>
+              </model>
+            </properties>
           </component>
         </children>
       </scrollpane>
