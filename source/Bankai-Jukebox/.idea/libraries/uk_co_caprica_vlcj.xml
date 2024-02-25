@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="uk.co.caprica.vlcj" type="repository">
+    <properties maven-id="uk.co.caprica:vlcj:4.8.2" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj/4.8.2/vlcj-4.8.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj-natives/4.8.1/vlcj-natives-4.8.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna-jpms/5.12.1/jna-jpms-5.12.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna-platform-jpms/5.12.1/jna-platform-jpms-5.12.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj/4.8.2/vlcj-4.8.2-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj-natives/4.8.1/vlcj-natives-4.8.1-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna-jpms/5.12.1/jna-jpms-5.12.1-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna-platform-jpms/5.12.1/jna-platform-jpms-5.12.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj/4.8.2/vlcj-4.8.2-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj-natives/4.8.1/vlcj-natives-4.8.1-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna-jpms/5.12.1/jna-jpms-5.12.1-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna-platform-jpms/5.12.1/jna-platform-jpms-5.12.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
