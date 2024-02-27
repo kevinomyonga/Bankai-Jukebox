@@ -1,55 +1,55 @@
 package com.bankai.jukebox.views.central;
 
+import com.bankai.jukebox.views.TitleText;
+import com.bankai.jukebox.views.player.PlayerPanel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class RadioPanel extends JPanel {
 
+    public RadioPanel(PlayerPanel playerPanel) {
+        super();
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        add(new TitleText("Radio Channels"));
+
+        add(new RadioPanelContent(playerPanel));
+
+        setVisible(true);
+    }
+
+}
+
+class RadioPanelContent extends JPanel {
+
     private JsonArray stations;
 
     int WIDTH = 150, HEIGHT = 150;
 
-    private static final long serialVersionUID = 1L;
+    private final PlayerPanel playerPanel;
 
-    /**
-     * Native media player factory.
-     */
-    private MediaPlayerFactory mediaPlayerFactory;
-
-    /**
-     * Native media player.
-     */
-    private MediaPlayer mediaPlayer;
-
-    private boolean record = false;
-
-    public RadioPanel() {
+    public RadioPanelContent(PlayerPanel playerPanel) {
         super();
+
         this.setLayout(new GridLayout(0, 4, 20, 20));
 
-        mediaPlayerFactory = new MediaPlayerFactory();
-        mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
+        this.playerPanel = playerPanel;
 
         loadStationsFromJSON();
 
@@ -60,10 +60,9 @@ public class RadioPanel extends JPanel {
 
     private void loadStationsFromJSON() {
         try {
-//            Object obj = JsonParser.parseReader(new FileReader(
-//                    String.valueOf(RadioPanel.class.getClassLoader().getResource("data/stations/Kenya.json"))));
-            Object obj = JsonParser.parseReader(new FileReader(
-                    "/Users/kevinomyonga/Developer/Projects/IdeaProjects/Bankai-Jukebox/source/Bankai-Jukebox/resources/data/stations/Kenya.json"));
+            Path path = Paths.get(Objects.requireNonNull(
+                    RadioPanel.class.getClassLoader().getResource("data/stations/Kenya.json")).toURI());
+            Object obj = JsonParser.parseReader(new FileReader(path.toString()));
             stations = (JsonArray) obj;
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,13 +79,25 @@ public class RadioPanel extends JPanel {
 
             // Create station panel
             JPanel stationPanel = new JPanel(new BorderLayout());
-            stationPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // Set panel size
+            stationPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT + 50)); // Set panel size
 
-            // Add image (assuming you have images corresponding to stations)
-            // Add image (lazy loading with fade-in effect)
+            // Add image through lazy loading with fade-in effect
+            // (assuming you have images corresponding to stations)
             ImageIcon defaultImageIcon = new ImageIcon(Objects.requireNonNull(
                     RadioPanel.class.getClassLoader().getResource("images/no-artwork.jpg")));
-            JLabel imageLabel = new JLabel(defaultImageIcon);
+
+            JButton imageLabel = new JButton(defaultImageIcon);
+            imageLabel.setText(title);
+            imageLabel.setToolTipText(title);
+            imageLabel.setVerticalTextPosition(AbstractButton.BOTTOM);
+            imageLabel.setHorizontalTextPosition(AbstractButton.CENTER);
+            imageLabel.addActionListener(e -> {
+                // Play the station stream
+                playerPanel.getPlayerRadioControlsPanel().playRadioStream(source1);
+                // Display dialog with station info
+//                    JOptionPane.showMessageDialog(null, "Title: " + title + "\nDescription: " + description);
+            });
+
             stationPanel.add(imageLabel, BorderLayout.CENTER);
 
             // Load image asynchronously
@@ -102,48 +113,12 @@ public class RadioPanel extends JPanel {
                 }
             }).start();
 
-            // Add station name
-            JLabel nameLabel = new JLabel(title);
-            stationPanel.add(nameLabel, BorderLayout.SOUTH);
-
-            // Add click listener
-            stationPanel.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    // Play the station stream
-                    mediaPlayer.media().play(source1);
-                    // Display dialog with station info
-//                    JOptionPane.showMessageDialog(null, "Title: " + title + "\nDescription: " + description);
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-
-                }
-            });
-//            stationPanel.addMouseListener(new StationClickListener(title, description, source1));
-
             // Add station panel to grid panel
             add(stationPanel);
         }
     }
 
-    private void fadeImageIn(JLabel imageLabel, ImageIcon imageIcon) {
+    private void fadeImageIn(JButton imageLabel, ImageIcon imageIcon) {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             private float opacity = 0;
@@ -162,7 +137,7 @@ public class RadioPanel extends JPanel {
         timer.schedule(task, 0, 100); // Adjust the interval here
     }
 
-    private void setOpacity(JLabel label, float opacity) {
+    private void setOpacity(JButton label, float opacity) {
         label.setIcon(new ImageIcon(makeImageTranslucent(((ImageIcon) label.getIcon()).getImage(), opacity)));
     }
 
@@ -191,38 +166,6 @@ public class RadioPanel extends JPanel {
         g2d.drawImage(image, 0, 0, width, height, null);
         g2d.dispose();
         return scaledImage;
-    }
-
-    private String[] getRecordMediaOptions(String address) {
-        File file = getFile(address);
-        StringBuilder sb = new StringBuilder(200);
-        sb.append("sout=#transcode{acodec=mp3,channels=2,ab=192,samplerate=44100}:duplicate{dst=display,dst=std{access=file,mux=raw,dst=");
-        sb.append(file.getPath());
-        sb.append("}}");
-        return new String[] {sb.toString()};
-    }
-
-    private File getFile(String address) {
-        StringBuilder sb = new StringBuilder(100);
-        try {
-            URL url = new URL(address);
-            sb.append(new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date()));
-            sb.append('-');
-            sb.append(url.getHost().replace('.', '_'));
-            sb.append('-');
-            sb.append(url.getPort());
-            sb.append(".mp3");
-
-            File userHomeDirectory = new File(System.getProperty("user.home"));
-            File saveDirectory = new File(userHomeDirectory, "vlcj-radio");
-            if(!saveDirectory.exists()) {
-                saveDirectory.mkdirs();
-            }
-            return new File(saveDirectory, sb.toString());
-        }
-        catch(MalformedURLException e) {
-            throw new RuntimeException("Unable to create a URL for '" + address + "'");
-        }
     }
 
 }

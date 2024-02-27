@@ -1,28 +1,39 @@
 package com.bankai.jukebox.views.player;
 
+import com.bankai.jukebox.controllers.AudioController;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class VolumeSliderPanel extends JPanel {
 
-    private JSlider slider;
+    private final JSlider slider;
 
-    public VolumeSliderPanel(){
+    public VolumeSliderPanel(MediaPlayer mediaPlayer){
 
-//        this.setBackground(new Color(40,40,40));
-        slider = new JSlider();
+        // Initialize AudioController with the provided MediaPlayer
+        AudioController audioController = new AudioController(mediaPlayer);
+
+        // Set default volume
+        int defaultVolume = 50;
+        audioController.changeVolume(defaultVolume);
+
+        // Initialize slider
+        slider = createSlider();
+
+        // Add change listener to the slider to change volume when slider value changes
+        slider.addChangeListener(e -> audioController.changeVolume((float)slider.getValue()));
+        add(slider);
+    }
+
+    // Method to create and configure the slider
+    private JSlider createSlider() {
+        JSlider slider = new JSlider();
         slider.setMinimum(0);
         slider.setMaximum(100);
         slider.setToolTipText("Volume");
-        slider.setPreferredSize(new Dimension(130,25));
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-//                AudioController.setMasterOutputVolume((float)slider.getValue()/100);
-            }
-        });
-        add(slider);
+        slider.setPreferredSize(new Dimension(130, 25));
+        return slider;
     }
 }

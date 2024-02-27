@@ -29,9 +29,9 @@ public class LibraryPanel extends JPanel {
     public LibraryPanel() {
         super();
 
-        this.setPreferredSize(new Dimension(250, 750));
-        setSize(400, 400);
-        this.setBackground(new Color(24, 24, 24, 20));
+        this.setPreferredSize(new Dimension(200, 600));
+//        setSize(400, 400);
+//        this.setBackground(new Color(24, 24, 24, 20));
         setLayout(new GridLayout(19, 1));
 
         jSeparator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -62,7 +62,6 @@ public class LibraryPanel extends JPanel {
             }
         });
         add(fileChooserBtn);
-
 
         /*
           This button shows all existed songs according to last time played

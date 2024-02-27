@@ -1,5 +1,7 @@
 package com.bankai.jukebox.views.central;
 
+import com.bankai.jukebox.views.player.PlayerPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,17 +10,15 @@ public class CentralPanel extends JPanel {
     private ShowPanel showPanel;
     private RadioPanel radioPanel;
 
-    public CentralPanel() {
+    public CentralPanel(PlayerPanel playerPanel) {
         super();
 
         this.setLayout(new BorderLayout());
-//        this.setBackground(new Color(33, 33, 33));
 
         showPanel = new ShowPanel();
-        radioPanel = new RadioPanel();
+        radioPanel = new RadioPanel(playerPanel);
         JScrollPane jscrollPane = new JScrollPane(radioPanel);
         jscrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//        jscrollPane.setBackground(new Color(33, 33, 33));
         this.add(jscrollPane, BorderLayout.CENTER);
     }
 }
