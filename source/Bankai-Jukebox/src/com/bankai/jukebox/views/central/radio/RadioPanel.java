@@ -1,4 +1,4 @@
-package com.bankai.jukebox.views.central;
+package com.bankai.jukebox.views.central.radio;
 
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;

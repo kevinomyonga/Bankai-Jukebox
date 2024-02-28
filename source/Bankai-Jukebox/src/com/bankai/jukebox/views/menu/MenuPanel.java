@@ -1,21 +1,21 @@
-package com.bankai.jukebox.views.library;
+package com.bankai.jukebox.views.menu;
+
+import com.bankai.jukebox.views.central.CentralPanel;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 
-public class LibraryPanel extends JPanel {
+public class MenuPanel extends JPanel {
 
+    private CentralPanel centralPanel;
     private JSeparator jSeparator;
     private JLabel libraryLabel;
     private JButton fileChooserBtn;
     private JButton songsBtn;
     private JButton albumsBtn;
+    private JButton videosBtn;
     private JButton EditBtn;
     private JLabel playlistLabel;
     private JButton playlistBtn;
@@ -26,13 +26,15 @@ public class LibraryPanel extends JPanel {
     private JButton radioChannelsBtn;
     private JButton radioChannelRecordingsBtn;
 
-    public LibraryPanel() {
+    public MenuPanel(CentralPanel centralPanel) {
         super();
 
         this.setPreferredSize(new Dimension(200, 600));
 //        setSize(400, 400);
 //        this.setBackground(new Color(24, 24, 24, 20));
         setLayout(new GridLayout(19, 1));
+
+        this.centralPanel = centralPanel;
 
         jSeparator = new JSeparator(SwingConstants.HORIZONTAL);
         jSeparator.setForeground(new Color(39, 39, 39, 20));
@@ -69,6 +71,7 @@ public class LibraryPanel extends JPanel {
         songsBtn = new JButton("Songs");
         songsBtn.setFont(new Font("Arial", Font.BOLD, 12));
         songsBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        songsBtn.addActionListener(e -> centralPanel.showSongsPanel());
         add(songsBtn);
 
         /*
@@ -77,7 +80,17 @@ public class LibraryPanel extends JPanel {
         albumsBtn = new JButton("Albums");
         albumsBtn.setFont(new Font("Arial", Font.BOLD, 12));
         albumsBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        albumsBtn.addActionListener(e -> centralPanel.showAlbumsPanel());
         add(albumsBtn);
+
+        /*
+          This button shows all videos
+         */
+        videosBtn = new JButton("Videos");
+        videosBtn.setFont(new Font("Arial", Font.BOLD, 12));
+        videosBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        videosBtn.addActionListener(e -> centralPanel.showVideosPanel());
+        add(videosBtn);
 
         /*
           By clicking this button a new panel will be opened and user
@@ -105,15 +118,14 @@ public class LibraryPanel extends JPanel {
         newPlaylistBtn.setHorizontalAlignment(SwingConstants.LEFT);
         add(newPlaylistBtn);
 
-
         /*
           This button shows all existing playlists for user
          */
         playlistBtn = new JButton("My Playlists");
         playlistBtn.setFont(new Font("Arial", Font.BOLD, 12));
         playlistBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        playlistBtn.addActionListener(e -> centralPanel.showPlaylistsPanel());
         add(playlistBtn);
-
 
         /*
           This buttons shows user's shared playlist on network
@@ -121,6 +133,7 @@ public class LibraryPanel extends JPanel {
         sharedPlaylistBtn = new JButton("Shared Playlist");
         sharedPlaylistBtn.setFont(new Font("Arial", Font.BOLD, 12));
         sharedPlaylistBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        sharedPlaylistBtn.addActionListener(e -> centralPanel.showShowPanel());
         add(sharedPlaylistBtn);
 
         /*
@@ -129,6 +142,7 @@ public class LibraryPanel extends JPanel {
         favouriteBtn = new JButton("Favourites");
         favouriteBtn.setFont(new Font("Arial", Font.BOLD, 12));
         favouriteBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        favouriteBtn.addActionListener(e -> centralPanel.showFavouritesPanel());
         add(favouriteBtn);
 
         add(Box.createRigidArea(new Dimension(0, 1)));
@@ -144,6 +158,7 @@ public class LibraryPanel extends JPanel {
         radioChannelsBtn = new JButton("Channels");
         radioChannelsBtn.setFont(new Font("Arial", Font.BOLD, 12));
         radioChannelsBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        radioChannelsBtn.addActionListener(e -> centralPanel.showRadioPanel());
         add(radioChannelsBtn);
 
         /*
@@ -152,6 +167,7 @@ public class LibraryPanel extends JPanel {
         radioChannelRecordingsBtn = new JButton("Recordings");
         radioChannelRecordingsBtn.setFont(new Font("Arial", Font.BOLD, 12));
         radioChannelRecordingsBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        radioChannelRecordingsBtn.addActionListener(e -> centralPanel.showRecordingsPanel());
         add(radioChannelRecordingsBtn);
 
         add(jSeparator);

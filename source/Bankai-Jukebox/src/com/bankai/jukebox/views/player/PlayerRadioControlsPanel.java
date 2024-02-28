@@ -84,8 +84,8 @@ public class PlayerRadioControlsPanel extends JPanel {
             sb.append(url.getPort());
             sb.append(".mp3");
 
-            File userHomeDirectory = new File(System.getProperty("user.home"));
-            File saveDirectory = new File(userHomeDirectory, Constants.APP_DIRECTORY + "/Radio");
+//            File userHomeDirectory = new File(System.getProperty("user.home"));
+            File saveDirectory = new File(Constants.APP_RECORDINGS_DIRECTORY);
             if(!saveDirectory.exists()) {
                 saveDirectory.mkdirs();
             }

@@ -2,6 +2,7 @@ package com.bankai.jukebox.views.player;
 
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,8 @@ public class PlayerPanel extends JPanel {
      */
     private MediaPlayer mediaPlayer;
 
+    private EmbeddedMediaPlayerComponent mediaPlayerComponent;
+
     private Color background;
     private final PlayerControlsPanel playerControlsPanel;
     private final PlayerRadioControlsPanel playerRadioControlsPanel;
@@ -30,6 +33,7 @@ public class PlayerPanel extends JPanel {
 
         mediaPlayerFactory = new MediaPlayerFactory();
         mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
+        mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
 
         background = new Color(40, 40, 40);
         this.setLayout(new BorderLayout());
@@ -59,7 +63,15 @@ public class PlayerPanel extends JPanel {
         return playerRadioControlsPanel;
     }
 
+    public MediaPlayerFactory getMediaPlayerFactory() {
+        return mediaPlayerFactory;
+    }
+
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+
+    public EmbeddedMediaPlayerComponent getMediaPlayerComponent() {
+        return mediaPlayerComponent;
     }
 }

@@ -27,4 +27,11 @@ public class AudioController {
         // Set the volume of the media player
         mediaPlayer.audio().setVolume((int) volume);
     }
+
+    /**
+     * Mute/Unmute the audio of the media player.
+     */
+    public void mute(boolean isMuted) {
+        mediaPlayer.audio().setMute(isMuted);
+    }
 }

@@ -11,5 +11,6 @@
     <orderEntry type="library" name="formdev.flatlaf" level="project" />
     <orderEntry type="library" name="uk.co.caprica.vlcj" level="project" />
     <orderEntry type="library" name="google.code.gson" level="project" />
+    <orderEntry type="library" name="net.coobird.thumbnailator" level="project" />
   </component>
 </module>
