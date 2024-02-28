@@ -1,5 +1,7 @@
 package com.bankai.jukebox.views.player;
 
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -7,6 +9,7 @@ import java.awt.event.MouseEvent;
 
 public class ProgressBarPanel extends JPanel implements Runnable {
 
+    private MediaPlayer mediaPlayer;
     private JTextField passed;
 //    private Color background;
     private JProgressBar progressBar;
@@ -14,8 +17,8 @@ public class ProgressBarPanel extends JPanel implements Runnable {
     private int num = 0;
     private boolean isPlaying;
 
-    public ProgressBarPanel() {
-
+    public ProgressBarPanel(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
 
         this.isPlaying = false;
 //        background = new Color(40, 40, 40);

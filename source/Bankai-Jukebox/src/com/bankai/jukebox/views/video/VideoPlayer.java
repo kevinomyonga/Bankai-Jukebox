@@ -1,9 +1,11 @@
 package com.bankai.jukebox.views.video;
 
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
+import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -11,17 +13,17 @@ import java.util.ArrayList;
 
 public class VideoPlayer extends JFrame {
 
-
-    private static final String NAME_VIDEO = "video";
-
-    private final EmbeddedMediaPlayerComponent mediaPlayerComponent;
+    private final CallbackMediaPlayerComponent mediaPlayerComponent;
+//    private final EmbeddedMediaPlayerComponent mediaPlayerComponent;
 
     // An Arraylist of videos that are playable, switch between them by queueIndex;
     private ArrayList<File> videoQueue;
 
     private JPanel container;
 
-    public VideoPlayer(EmbeddedMediaPlayerComponent mediaPlayerComponent, ArrayList<File> videoQueue) {
+    private VideoPlayerControlsPanel videoPlayerControlsPanel;
+
+    public VideoPlayer(CallbackMediaPlayerComponent mediaPlayerComponent, ArrayList<File> videoQueue) {
         super();
 
         this.mediaPlayerComponent = mediaPlayerComponent;
@@ -63,6 +65,11 @@ public class VideoPlayer extends JFrame {
         container = new JPanel();
         container.setLayout(new BorderLayout());
         container.add(mediaPlayerComponent, BorderLayout.CENTER);
+
+        videoPlayerControlsPanel = new VideoPlayerControlsPanel(mediaPlayerComponent);
+
+        container.add(videoPlayerControlsPanel, BorderLayout.SOUTH);
+
         this.setContentPane(container);
     }
 
@@ -82,10 +89,10 @@ public class VideoPlayer extends JFrame {
         if (!videoQueue.isEmpty()) {
             setTitle(videoQueue.getFirst().getName());
             // Load video
-//            loadVideo(videoQueue.getFirst().getAbsolutePath());
+            loadVideo(videoQueue.getFirst().getAbsolutePath());
 
             // Play
-            mediaPlayerComponent.mediaPlayer().media().play(videoQueue.getFirst().getAbsolutePath());
+            mediaPlayerComponent.mediaPlayer().controls().play();
         }
     }
 }

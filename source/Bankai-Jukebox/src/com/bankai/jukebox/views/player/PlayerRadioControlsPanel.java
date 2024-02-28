@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class PlayerRadioControlsPanel extends JPanel {
 
@@ -20,12 +21,17 @@ public class PlayerRadioControlsPanel extends JPanel {
     private JButton recordStreamBtn;
 
     private boolean record = false;
+    private String sourceMrl;
 
     public PlayerRadioControlsPanel(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
 
         startStreamBtn = new JButton("Start Stream");
-        startStreamBtn.addActionListener(e -> playRadioStream(""));
+        startStreamBtn.addActionListener(e -> {
+            if(!Objects.equals(sourceMrl, "")) {
+                playRadioStream(sourceMrl);
+            }
+        });
         add(startStreamBtn);
 
         stopStreamBtn = new JButton("Stop Stream");
@@ -33,7 +39,11 @@ public class PlayerRadioControlsPanel extends JPanel {
         add(stopStreamBtn);
 
         recordStreamBtn = new JButton("Record Stream");
-        recordStreamBtn.addActionListener(e -> recordRadioStream("https://smoothfm-atunwadigital.streamguys1.com/smoothfm"));
+        recordStreamBtn.addActionListener(e -> {
+            if(!Objects.equals(sourceMrl, "")) {
+                recordRadioStream(sourceMrl);
+            }
+        });
         add(recordStreamBtn);
 
         setVisible(true);
@@ -41,6 +51,7 @@ public class PlayerRadioControlsPanel extends JPanel {
 
     public void playRadioStream(String sourceMrl) {
         // Play the station stream
+        this.sourceMrl = sourceMrl;
         mediaPlayer.media().play(sourceMrl);
     }
 

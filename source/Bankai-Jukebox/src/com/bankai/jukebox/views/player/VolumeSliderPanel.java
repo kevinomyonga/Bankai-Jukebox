@@ -16,8 +16,8 @@ public class VolumeSliderPanel extends JPanel {
         AudioController audioController = new AudioController(mediaPlayer);
 
         // Set default volume
-        int defaultVolume = 50;
-        audioController.changeVolume(defaultVolume);
+//        int defaultVolume = 50;
+//        audioController.changeVolume(defaultVolume);
 
         // Initialize slider
         slider = createSlider();

@@ -2,7 +2,9 @@ package com.bankai.jukebox.views.player;
 
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
+import uk.co.caprica.vlcj.player.component.MediaPlayerComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +21,7 @@ public class PlayerPanel extends JPanel {
      */
     private MediaPlayer mediaPlayer;
 
-    private EmbeddedMediaPlayerComponent mediaPlayerComponent;
+    private CallbackMediaPlayerComponent mediaPlayerComponent;
 
     private Color background;
     private final PlayerControlsPanel playerControlsPanel;
@@ -33,7 +35,7 @@ public class PlayerPanel extends JPanel {
 
         mediaPlayerFactory = new MediaPlayerFactory();
         mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
-        mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
+        mediaPlayerComponent = new CallbackMediaPlayerComponent();
 
         background = new Color(40, 40, 40);
         this.setLayout(new BorderLayout());
@@ -45,7 +47,7 @@ public class PlayerPanel extends JPanel {
         playerRadioControlsPanel = new PlayerRadioControlsPanel(mediaPlayer);
         this.add(playerRadioControlsPanel, BorderLayout.CENTER);
 
-        progressBarPanel = new ProgressBarPanel();
+        progressBarPanel = new ProgressBarPanel(mediaPlayer);
         this.add(progressBarPanel, BorderLayout.SOUTH);
 
         songInfoPanel = new SongInfoPanel();
@@ -71,7 +73,7 @@ public class PlayerPanel extends JPanel {
         return mediaPlayer;
     }
 
-    public EmbeddedMediaPlayerComponent getMediaPlayerComponent() {
+    public CallbackMediaPlayerComponent getMediaPlayerComponent() {
         return mediaPlayerComponent;
     }
 }
