@@ -3,6 +3,8 @@ package com.bankai.jukebox.views.central;
 import com.bankai.jukebox.views.central.library.AlbumsPanel;
 import com.bankai.jukebox.views.central.library.SongsPanel;
 import com.bankai.jukebox.views.central.library.VideosPanel;
+import com.bankai.jukebox.views.central.more.AboutPanel;
+import com.bankai.jukebox.views.central.more.SettingsPanel;
 import com.bankai.jukebox.views.central.playlists.FavouritesPanel;
 import com.bankai.jukebox.views.central.playlists.PlaylistsPanel;
 import com.bankai.jukebox.views.central.radio.RadioPanel;
@@ -85,5 +87,17 @@ public class CentralPanel extends JPanel {
     public void showRecordingsPanel() {
         RecordingsPanel recordingsPanel = new RecordingsPanel(playerPanel);
         setContentPanel(recordingsPanel);
+    }
+
+    // Method to switch to the settings panel
+    public void showSettingsPanel() {
+        SettingsPanel settingsPanel = new SettingsPanel(playerPanel);
+        setContentPanel(settingsPanel);
+    }
+
+    // Method to switch to the about panel
+    public void showAboutPanel() {
+        AboutPanel aboutPanel = new AboutPanel(playerPanel);
+        setContentPanel(aboutPanel);
     }
 }

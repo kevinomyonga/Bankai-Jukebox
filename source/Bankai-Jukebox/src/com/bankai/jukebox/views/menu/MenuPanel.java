@@ -25,14 +25,17 @@ public class MenuPanel extends JPanel {
     private JLabel radioLabel;
     private JButton radioChannelsBtn;
     private JButton radioChannelRecordingsBtn;
+    private JLabel moreLabel;
+    private JButton settingsBtn;
+    private JButton aboutBtn;
 
     public MenuPanel(CentralPanel centralPanel) {
         super();
 
-        this.setPreferredSize(new Dimension(200, 600));
+        this.setPreferredSize(new Dimension(200, 800));
 //        setSize(400, 400);
 //        this.setBackground(new Color(24, 24, 24, 20));
-        setLayout(new GridLayout(19, 1));
+        setLayout(new GridLayout(25, 1));
 
         this.centralPanel = centralPanel;
 
@@ -171,6 +174,29 @@ public class MenuPanel extends JPanel {
         add(radioChannelRecordingsBtn);
 
         add(jSeparator);
+
+        moreLabel = new JLabel("    MORE");
+        moreLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        moreLabel.setBackground(this.getBackground());
+        add(moreLabel);
+
+        /*
+          This button navigates to the settings panel
+         */
+        settingsBtn = new JButton("Settings");
+        settingsBtn.setFont(new Font("Arial", Font.BOLD, 12));
+        settingsBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        settingsBtn.addActionListener(e -> centralPanel.showSettingsPanel());
+        add(settingsBtn);
+
+        /*
+          This button navigates to the about panel
+         */
+        aboutBtn = new JButton("About");
+        aboutBtn.setFont(new Font("Arial", Font.BOLD, 12));
+        aboutBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        aboutBtn.addActionListener(e -> centralPanel.showAboutPanel());
+        add(aboutBtn);
 
         setVisible(true);
     }
