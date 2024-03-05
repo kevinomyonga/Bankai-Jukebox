@@ -5,12 +5,10 @@ import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.central.library.VideosPanel;
 import com.bankai.jukebox.views.player.PlayerPanel;
 import com.bankai.jukebox.views.video.VideoPlayer;
-import net.coobird.thumbnailator.Thumbnails;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -74,13 +72,6 @@ class PlaylistsPanelContent extends JPanel {
         }
 
         setVisible(true);
-    }
-
-    private Image createThumbnail(File videoFile, int width, int height) throws IOException {
-        return Thumbnails.of(videoFile)
-                .size(width, height)
-                .outputFormat("jpg")
-                .asBufferedImage();
     }
 
     private ArrayList<File> getVideoFiles(String folderPath) {

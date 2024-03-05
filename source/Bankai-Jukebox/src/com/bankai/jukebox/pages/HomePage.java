@@ -40,12 +40,13 @@ public class HomePage extends JFrame {
 
         // Initialize and add the CentralPanel to the center of the JFrame
         CentralPanel centralPanel = new CentralPanel(playerPanel);
+        centralPanel.showSongsPanel();
         this.add(centralPanel, BorderLayout.CENTER);
 
         // Initialize and add the MenuPanel to the left of the JFrame with a scroll pane
         MenuPanel menuPanel = new MenuPanel(centralPanel);
         JScrollPane jScrollPane = new JScrollPane(menuPanel);
-        jScrollPane.setPreferredSize(new Dimension(250, 800));
+        jScrollPane.setPreferredSize(new Dimension(250, 690));
         jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.add(jScrollPane, BorderLayout.WEST);
     }

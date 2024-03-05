@@ -4,12 +4,10 @@ import com.bankai.jukebox.config.Constants;
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;
 import com.bankai.jukebox.views.video.VideoPlayer;
-import net.coobird.thumbnailator.Thumbnails;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -22,13 +20,13 @@ public class VideosPanel extends JPanel {
 
         add(new TitleText("Videos"));
 
-        add(new VideoPanelContent(playerPanel));
+        add(new VideosPanelContent(playerPanel));
 
         setVisible(true);
     }
 }
 
-class VideoPanelContent extends JPanel {
+class VideosPanelContent extends JPanel {
 
     int WIDTH = 150, HEIGHT = 150;
 
@@ -36,7 +34,7 @@ class VideoPanelContent extends JPanel {
 
     private ArrayList<File> videoFiles;
 
-    public VideoPanelContent(PlayerPanel playerPanel) {
+    public VideosPanelContent(PlayerPanel playerPanel) {
         super();
 
         this.setLayout(new GridLayout(0, 4, 20, 20));
@@ -73,13 +71,6 @@ class VideoPanelContent extends JPanel {
         }
 
         setVisible(true);
-    }
-
-    private Image createThumbnail(File videoFile, int width, int height) throws IOException {
-        return Thumbnails.of(videoFile)
-                .size(width, height)
-                .outputFormat("jpg")
-                .asBufferedImage();
     }
 
     private ArrayList<File> getVideoFiles(String folderPath) {

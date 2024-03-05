@@ -1,11 +1,10 @@
 package com.bankai.jukebox.views.video;
 
-import com.bankai.jukebox.views.player.Icons;
+import com.bankai.jukebox.config.Icons;
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 public class VideoPlayerControlsPanel extends JPanel {
 

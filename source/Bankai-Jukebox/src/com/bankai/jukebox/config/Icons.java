@@ -1,6 +1,4 @@
-package com.bankai.jukebox.views.player;
-
-import com.bankai.jukebox.views.central.library.VideosPanel;
+package com.bankai.jukebox.config;
 
 import javax.swing.*;
 import java.awt.*;

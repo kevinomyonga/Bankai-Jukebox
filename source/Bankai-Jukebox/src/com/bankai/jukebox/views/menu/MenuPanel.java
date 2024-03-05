@@ -16,7 +16,6 @@ public class MenuPanel extends JPanel {
     private JButton songsBtn;
     private JButton albumsBtn;
     private JButton videosBtn;
-    private JButton EditBtn;
     private JLabel playlistLabel;
     private JButton playlistBtn;
     private JButton newPlaylistBtn;
@@ -32,7 +31,7 @@ public class MenuPanel extends JPanel {
     public MenuPanel(CentralPanel centralPanel) {
         super();
 
-        this.setPreferredSize(new Dimension(200, 800));
+        this.setPreferredSize(new Dimension(200, 690));
 //        setSize(400, 400);
 //        this.setBackground(new Color(24, 24, 24, 20));
         setLayout(new GridLayout(25, 1));
@@ -51,30 +50,13 @@ public class MenuPanel extends JPanel {
         add(libraryLabel);
 
         /*
-          This button is for adding a new song to the program
-         */
-        fileChooserBtn = new JButton("Add To Library");
-        fileChooserBtn.setFont(new Font("Arial", Font.BOLD, 12));
-        fileChooserBtn.setHorizontalAlignment(SwingConstants.LEFT);
-        fileChooserBtn.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileFilter(new FileNameExtensionFilter(".mp3 files", "mp3"));
-            fileChooser.setCurrentDirectory(new File("E:/"));
-            int result = fileChooser.showOpenDialog(fileChooser);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-//                    saveSong(addSong(selectedFile.getAbsolutePath()));
-            }
-        });
-        add(fileChooserBtn);
-
-        /*
           This button shows all existed songs according to last time played
          */
         songsBtn = new JButton("Songs");
         songsBtn.setFont(new Font("Arial", Font.BOLD, 12));
         songsBtn.setHorizontalAlignment(SwingConstants.LEFT);
         songsBtn.addActionListener(e -> centralPanel.showSongsPanel());
+        songsBtn.setPreferredSize(new Dimension(0, 1));
         add(songsBtn);
 
         /*
@@ -96,13 +78,22 @@ public class MenuPanel extends JPanel {
         add(videosBtn);
 
         /*
-          By clicking this button a new panel will be opened and user
-          and choose what songs to be deleted from the program
+          This button is for adding a new song to the program
          */
-        EditBtn = new JButton("Edit");
-        EditBtn.setFont(new Font("Arial", Font.BOLD, 12));
-        EditBtn.setHorizontalAlignment(SwingConstants.LEFT);
-        add(EditBtn);
+        fileChooserBtn = new JButton("Add To Library");
+        fileChooserBtn.setFont(new Font("Arial", Font.BOLD, 12));
+        fileChooserBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        fileChooserBtn.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter(".mp3 files", "mp3"));
+            fileChooser.setCurrentDirectory(new File("E:/"));
+            int result = fileChooser.showOpenDialog(fileChooser);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+//                    saveSong(addSong(selectedFile.getAbsolutePath()));
+            }
+        });
+        add(fileChooserBtn);
 
         add(Box.createRigidArea(new Dimension(0, 1)));
 

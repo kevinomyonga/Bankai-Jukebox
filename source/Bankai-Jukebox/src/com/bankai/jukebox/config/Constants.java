@@ -1,5 +1,7 @@
 package com.bankai.jukebox.config;
 
+import java.time.Year;
+
 /**
  * A class to hold the Constants values.
  *
@@ -14,9 +16,28 @@ public class Constants {
     public static final String APP_NAME = "Bankai Jukebox";
 
     /**
+     * A constant field to denote the value of APP_DESCRIPTION.
+     */
+    public static final String APP_DESCRIPTION = "Virtual Jukebox Simulation Project By The Bankai Group";
+
+    /**
      * A constant field to denote the value of APP_VERSION.
      */
     public static final String APP_VERSION = "2024.3.0";
+
+    /**
+     * A constant field to denote the value of APP_COPYRIGHT.
+     */
+    public static final String APP_COPYRIGHT = "The Bankai Group © " + Year.now().getValue();
+
+    /**
+     * A constant field to denote the value of APP_COPYRIGHT.
+     */
+    public static final String APP_DEV_TEAM = "Kevin Omyonga |\n" +
+            "Billy Nelson Omingo |\n" +
+            "Brian John Onsati |\n" +
+            "Leonard Ochieng Omondi |\n" +
+            "Wellingtone Wekesa Luvonga";
 
     /**
      * A constant field to denote the value of APP_DIRECTORY.

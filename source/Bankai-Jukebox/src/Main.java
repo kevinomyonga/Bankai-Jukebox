@@ -1,5 +1,6 @@
 import com.bankai.jukebox.config.Constants;
 import com.bankai.jukebox.pages.HomePage;
+import com.bankai.jukebox.views.SplashScreen;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -14,10 +15,12 @@ public class Main {
         }
 
         FlatMacLightLaf.setup();
-//        FlatMacDarkLaf.setup();
 
 //        Jukebox jukebox = new Jukebox();
 //        jukebox.guiLaunch();
+
+        SplashScreen splashScreen = new SplashScreen(3000);
+        splashScreen.showSplash();
 
         new HomePage();
     }

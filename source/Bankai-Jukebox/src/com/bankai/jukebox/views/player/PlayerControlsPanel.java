@@ -1,5 +1,6 @@
 package com.bankai.jukebox.views.player;
 
+import com.bankai.jukebox.config.Icons;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class PlayerControlsPanel extends JPanel {
         playPauseStreamBtn = new JButton(!mediaPlayer.status().isPlaying() ?
                 icons.getPlayIcon() : icons.getPauseIcon());
         playPauseStreamBtn.addActionListener(e -> {
-            if(!Objects.equals(sourceMrl, "")) {
+            if(!Objects.equals(sourceMrl, "") && (sourceMrl != null)) {
                 if (!mediaPlayer.status().isPlaying()) {
                     playPauseStreamBtn.setIcon(icons.getPauseIcon());
                     playStream(sourceMrl);

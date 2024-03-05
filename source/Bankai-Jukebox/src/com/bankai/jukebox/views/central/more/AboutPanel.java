@@ -2,7 +2,7 @@ package com.bankai.jukebox.views.central.more;
 
 import com.bankai.jukebox.config.Constants;
 import com.bankai.jukebox.views.TitleText;
-import com.bankai.jukebox.views.player.Icons;
+import com.bankai.jukebox.config.Icons;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,12 +41,17 @@ class AboutPanelContent extends JPanel {
 
         JLabel descriptionLabel = new JLabel();
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        descriptionLabel.setText("This is a description of the app.");
+        descriptionLabel.setText(Constants.APP_DESCRIPTION);
         add(descriptionLabel);
+
+        JLabel devTeamLabel = new JLabel();
+        devTeamLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        devTeamLabel.setText(Constants.APP_DEV_TEAM);
+        add(devTeamLabel);
 
         JLabel copyrightLabel = new JLabel();
         copyrightLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        copyrightLabel.setText("Copyright 2024");
+        copyrightLabel.setText(Constants.APP_COPYRIGHT);
         add(copyrightLabel);
 
         setVisible(true);

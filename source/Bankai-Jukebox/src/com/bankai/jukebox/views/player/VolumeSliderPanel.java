@@ -1,5 +1,6 @@
 package com.bankai.jukebox.views.player;
 
+import com.bankai.jukebox.config.Icons;
 import com.bankai.jukebox.controllers.AudioController;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
