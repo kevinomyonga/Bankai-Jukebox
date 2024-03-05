@@ -8,16 +8,26 @@ import java.awt.*;
 
 public class VolumeSliderPanel extends JPanel {
 
+    private JButton lyricsBtn;
+    private JLabel volumeIcon;
     private final JSlider slider;
 
     public VolumeSliderPanel(MediaPlayer mediaPlayer){
 
+        this.setLayout(new FlowLayout());
+
+        Icons icons = new Icons();
+
+        lyricsBtn = new JButton(icons.getLyricsIcon());
+        lyricsBtn.addActionListener(e -> showLyrics());
+        add(lyricsBtn);
+
+        volumeIcon = new JLabel();
+        volumeIcon.setIcon(icons.getVolumeIcon());
+        add(volumeIcon);
+
         // Initialize AudioController with the provided MediaPlayer
         AudioController audioController = new AudioController(mediaPlayer);
-
-        // Set default volume
-//        int defaultVolume = 50;
-//        audioController.changeVolume(defaultVolume);
 
         // Initialize slider
         slider = createSlider();
@@ -35,5 +45,8 @@ public class VolumeSliderPanel extends JPanel {
         slider.setToolTipText("Volume");
         slider.setPreferredSize(new Dimension(130, 25));
         return slider;
+    }
+
+    private void showLyrics() {
     }
 }

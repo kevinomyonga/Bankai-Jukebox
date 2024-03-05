@@ -16,7 +16,7 @@ public class Constants {
     /**
      * A constant field to denote the value of APP_VERSION.
      */
-    public static final String APP_VERSION = "2024.2.0";
+    public static final String APP_VERSION = "2024.3.0";
 
     /**
      * A constant field to denote the value of APP_DIRECTORY.

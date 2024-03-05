@@ -3,8 +3,6 @@ package com.bankai.jukebox.views.player;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent;
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
-import uk.co.caprica.vlcj.player.component.MediaPlayerComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,11 +22,14 @@ public class PlayerPanel extends JPanel {
     private CallbackMediaPlayerComponent mediaPlayerComponent;
 
     private Color background;
-    private final PlayerControlsPanel playerControlsPanel;
-    private final PlayerRadioControlsPanel playerRadioControlsPanel;
+    private PlayerControlsPanel playerControlsPanel;
+    private PlayerRadioControlsPanel playerRadioControlsPanel;
     private ProgressBarPanel progressBarPanel;
     private SongInfoPanel songInfoPanel;
     private VolumeSliderPanel volumeSliderPanel;
+    private JPanel centerConsole;
+
+    private boolean isRadio = false;
 
     public PlayerPanel() {
         super();
@@ -41,14 +42,18 @@ public class PlayerPanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBackground(background);
 
-        playerControlsPanel = new PlayerControlsPanel();
-        this.add(playerControlsPanel, BorderLayout.CENTER);
+        centerConsole = new JPanel();
+        centerConsole.setPreferredSize(new Dimension(80,30));
+        centerConsole.setLayout(new BorderLayout());
 
+        playerControlsPanel = new PlayerControlsPanel(mediaPlayer);
         playerRadioControlsPanel = new PlayerRadioControlsPanel(mediaPlayer);
-        this.add(playerRadioControlsPanel, BorderLayout.CENTER);
 
         progressBarPanel = new ProgressBarPanel(mediaPlayer);
-        this.add(progressBarPanel, BorderLayout.SOUTH);
+
+        updateCenterConsole();
+
+        this.add(centerConsole, BorderLayout.CENTER);
 
         songInfoPanel = new SongInfoPanel();
         this.add(songInfoPanel, BorderLayout.WEST);
@@ -58,11 +63,30 @@ public class PlayerPanel extends JPanel {
     }
 
     public PlayerControlsPanel getPlayerControlsPanel() {
+        isRadio = false;
+        updateCenterConsole();
         return playerControlsPanel;
     }
 
     public PlayerRadioControlsPanel getPlayerRadioControlsPanel() {
+        isRadio = true;
+        updateCenterConsole();
         return playerRadioControlsPanel;
+    }
+
+    public void updateCenterConsole() {
+        if(!isRadio) {
+            centerConsole.add(playerControlsPanel, BorderLayout.CENTER);
+            centerConsole.add(progressBarPanel, BorderLayout.SOUTH);
+            playerControlsPanel.setVisible(true);
+            progressBarPanel.setVisible(true);
+            playerRadioControlsPanel.setVisible(false);
+        } else {
+            centerConsole.add(playerRadioControlsPanel, BorderLayout.CENTER);
+            playerControlsPanel.setVisible(false);
+            progressBarPanel.setVisible(false);
+            playerRadioControlsPanel.setVisible(true);
+        }
     }
 
     public MediaPlayerFactory getMediaPlayerFactory() {
@@ -70,7 +94,7 @@ public class PlayerPanel extends JPanel {
     }
 
     public MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
+        return mediaPlayerComponent.mediaPlayer();
     }
 
     public CallbackMediaPlayerComponent getMediaPlayerComponent() {

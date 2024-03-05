@@ -4,8 +4,6 @@ import com.bankai.jukebox.config.Constants;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;

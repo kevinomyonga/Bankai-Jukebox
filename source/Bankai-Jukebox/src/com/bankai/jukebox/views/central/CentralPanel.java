@@ -91,13 +91,13 @@ public class CentralPanel extends JPanel {
 
     // Method to switch to the settings panel
     public void showSettingsPanel() {
-        SettingsPanel settingsPanel = new SettingsPanel(playerPanel);
+        SettingsPanel settingsPanel = new SettingsPanel();
         setContentPanel(settingsPanel);
     }
 
     // Method to switch to the about panel
     public void showAboutPanel() {
-        AboutPanel aboutPanel = new AboutPanel(playerPanel);
+        AboutPanel aboutPanel = new AboutPanel();
         setContentPanel(aboutPanel);
     }
 }
