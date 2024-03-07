@@ -1,10 +1,13 @@
 package com.bankai.jukebox.views.central.radio;
 
+import com.bankai.jukebox.models.RadioStation;
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,9 +16,11 @@ import java.awt.image.BufferedImage;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,7 +43,7 @@ public class RadioPanel extends JPanel {
 
 class RadioPanelContent extends JPanel {
 
-    private JsonArray stations;
+    private ArrayList<RadioStation> radioStations;
 
     int WIDTH = 150, HEIGHT = 150;
 
@@ -59,23 +64,36 @@ class RadioPanelContent extends JPanel {
     }
 
     private void loadStationsFromJSON() {
+        Gson gson = new Gson();
         try {
             Path path = Paths.get(Objects.requireNonNull(
                     RadioPanel.class.getClassLoader().getResource("data/stations/Kenya.json")).toURI());
-            Object obj = JsonParser.parseReader(new FileReader(path.toString()));
-            stations = (JsonArray) obj;
+//            Object obj = JsonParser.parseReader(new FileReader(path.toString()));
+//            stations = (JsonArray) obj;
+
+            FileReader reader = new FileReader(path.toString());
+
+            // Define the type of the list
+            Type listType = new TypeToken<ArrayList<RadioStation>>(){}.getType();
+
+            // Deserialize the JSON into a list of RadioStation objects
+            radioStations = gson.fromJson(reader, listType);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void displayStations() {
-        for (Object obj : stations) {
-            JsonObject station = (JsonObject) obj;
-            String title = station.get("Title").getAsString();
-            String description = station.get("Description").getAsString();
-            String logoUrl = station.get("Logo").getAsString();
-            String source1 = station.get("Source1").getAsString();
+        for (RadioStation radioStation : radioStations) {
+//            JsonObject station = (JsonObject) obj;
+//            String title = station.get("Title").getAsString();
+//            String description = station.get("Description").getAsString();
+//            String logoUrl = station.get("Logo").getAsString();
+//            String source1 = station.get("Source1").getAsString();
+            String title = radioStation.getTitle();
+            String description = radioStation.getDescription();
+            String logoUrl = radioStation.getLogo();
+            String source1 = radioStation.getSource1();
 
             // Create station panel
             JPanel stationPanel = new JPanel(new BorderLayout());
@@ -92,8 +110,8 @@ class RadioPanelContent extends JPanel {
             imageLabel.setVerticalTextPosition(AbstractButton.BOTTOM);
             imageLabel.setHorizontalTextPosition(AbstractButton.CENTER);
             imageLabel.addActionListener(e -> {
-                // Play the station stream
-                playerPanel.getPlayerRadioControlsPanel().playRadioStream(source1);
+                // Play the radio station stream
+                playerPanel.getPlayerRadioControlsPanel().playRadioStream(radioStation);
                 // Display dialog with station info
 //                    JOptionPane.showMessageDialog(null, "Title: " + title + "\nDescription: " + description);
             });

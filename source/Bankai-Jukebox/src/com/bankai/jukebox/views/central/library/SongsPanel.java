@@ -57,9 +57,9 @@ class SongsPanelContent extends JPanel {
                 button.setVerticalTextPosition(AbstractButton.BOTTOM);
                 button.setHorizontalTextPosition(AbstractButton.CENTER);
                 button.addActionListener(e -> {
-                    ArrayList<File> videoQueue = new ArrayList<>();
-                    videoQueue.add(file);
-                    new VideoPlayer(playerPanel.getMediaPlayerComponent(), videoQueue);
+                    // Update Controls Panel
+                    playerPanel.getPlayerControlsPanel();
+                    playerPanel.getPlayBackController().play(file.getAbsolutePath());
                 });
 
                 add(button);

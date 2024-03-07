@@ -5,6 +5,7 @@ import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 public class PlayBackController {
 
@@ -24,11 +25,25 @@ public class PlayBackController {
         }
     }
 
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
     /**
      * Plays the media
      */
     public void play(String sourceMrl) {
-        mediaPlayer.media().play(sourceMrl);
+        String currentSourceMrl = mediaPlayer.media().info() != null ? mediaPlayer.media().info().mrl() : null;
+
+        if(currentSourceMrl == null || !Objects.equals(sourceMrl, currentSourceMrl)) {
+            // Load media
+            mediaPlayer.media().startPaused(sourceMrl);
+
+            // Play
+            mediaPlayer.controls().play();
+        } else {
+            mediaPlayer.controls().play();
+        }
     }
 
     /**
@@ -46,17 +61,17 @@ public class PlayBackController {
 //        }
 //    }
 
-//    /**
-//     * shuffles playlist by stopping the player and shuffling song queue and then playing the player
-//     */
-//    public void shuffle() {
-//        if (!songQueue.isEmpty()) {
-//            mediaPlayer.controls().stop();
-//            Collections.shuffle(songQueue);
-//            queueIndex = 0;
+    /**
+     * shuffles playlist by stopping the player and shuffling song queue and then playing the player
+     */
+    public void shuffle() {
+        if (!songQueue.isEmpty()) {
+            mediaPlayer.controls().stop();
+            Collections.shuffle(songQueue);
+            queueIndex = 0;
 //            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
-//        }
-//    }
+        }
+    }
 
     /**
      * pauses the media player

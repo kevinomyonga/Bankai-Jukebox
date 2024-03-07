@@ -43,7 +43,7 @@ class RecordingsPanelContent extends JPanel {
     public RecordingsPanelContent(PlayerPanel playerPanel) {
         super();
 
-        this.setLayout(new FlowLayout());
+        this.setLayout(new BorderLayout());
 
         this.playerPanel = playerPanel;
 
@@ -86,7 +86,7 @@ class RecordingsPanelContent extends JPanel {
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.add(table, BorderLayout.CENTER);
         tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
-        add(tablePanel);
+        add(tablePanel, BorderLayout.CENTER);
 
         recordingFiles = getVideoFiles(folderPath);
 

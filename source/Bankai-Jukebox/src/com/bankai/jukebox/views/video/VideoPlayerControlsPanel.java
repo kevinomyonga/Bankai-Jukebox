@@ -16,7 +16,7 @@ public class VideoPlayerControlsPanel extends JPanel {
         Icons icons = new Icons();
 
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        setBackground(new Color(0, 0, 0, 100)); // Translucent background
+//        setBackground(new Color(0, 0, 0, 100)); // Translucent background
         setVisible(false); // Initially hidden
 
         JButton rewindButton = new JButton("Rewind");

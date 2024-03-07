@@ -1,6 +1,7 @@
 package com.bankai.jukebox.views.player;
 
 import com.bankai.jukebox.config.Constants;
+import com.bankai.jukebox.models.RadioStation;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import javax.swing.*;
@@ -9,7 +10,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 public class PlayerRadioControlsPanel extends JPanel {
 
@@ -19,15 +19,15 @@ public class PlayerRadioControlsPanel extends JPanel {
     private JButton recordStreamBtn;
 
     private boolean record = false;
-    private String sourceMrl;
+    private RadioStation radioStation;
 
     public PlayerRadioControlsPanel(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
 
         startStreamBtn = new JButton("Start Stream");
         startStreamBtn.addActionListener(e -> {
-            if(!Objects.equals(sourceMrl, "")) {
-                playRadioStream(sourceMrl);
+            if(radioStation != null) {
+                recordRadioStream(radioStation.getSource1());
             }
         });
         add(startStreamBtn);
@@ -38,8 +38,8 @@ public class PlayerRadioControlsPanel extends JPanel {
 
         recordStreamBtn = new JButton("Record Stream");
         recordStreamBtn.addActionListener(e -> {
-            if(!Objects.equals(sourceMrl, "")) {
-                recordRadioStream(sourceMrl);
+            if(radioStation != null) {
+                recordRadioStream(radioStation.getSource1());
             }
         });
         add(recordStreamBtn);
@@ -47,10 +47,10 @@ public class PlayerRadioControlsPanel extends JPanel {
         setVisible(true);
     }
 
-    public void playRadioStream(String sourceMrl) {
+    public void playRadioStream(RadioStation radioStation) {
         // Play the station stream
-        this.sourceMrl = sourceMrl;
-        mediaPlayer.media().play(sourceMrl);
+        this.radioStation = radioStation;
+        mediaPlayer.media().play(radioStation.getSource1());
     }
 
 
@@ -88,12 +88,13 @@ public class PlayerRadioControlsPanel extends JPanel {
             URL url = new URL(address);
             sb.append(new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date()));
             sb.append('-');
-            sb.append(url.getHost().replace('.', '_'));
+            sb.append(radioStation.getTitle().replace(' ', '_'));
+            sb.append('-');
+            sb.append(Constants.APP_NAME.replace(' ', '_'));
             sb.append('-');
             sb.append(url.getPort());
             sb.append(".mp3");
 
-//            File userHomeDirectory = new File(System.getProperty("user.home"));
             File saveDirectory = new File(Constants.APP_RECORDINGS_DIRECTORY);
             if(!saveDirectory.exists()) {
                 saveDirectory.mkdirs();

@@ -1,5 +1,6 @@
 package com.bankai.jukebox.views.player;
 
+import com.bankai.jukebox.controllers.PlayBackController;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent;
@@ -9,17 +10,8 @@ import java.awt.*;
 
 public class PlayerPanel extends JPanel {
 
-    /**
-     * Native media player factory.
-     */
-    private MediaPlayerFactory mediaPlayerFactory;
-
-    /**
-     * Native media player.
-     */
-    private MediaPlayer mediaPlayer;
-
     private CallbackMediaPlayerComponent mediaPlayerComponent;
+    private PlayBackController playBackController;
 
     private Color background;
     private PlayerControlsPanel playerControlsPanel;
@@ -34,9 +26,9 @@ public class PlayerPanel extends JPanel {
     public PlayerPanel() {
         super();
 
-        mediaPlayerFactory = new MediaPlayerFactory();
-        mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
         mediaPlayerComponent = new CallbackMediaPlayerComponent();
+
+        playBackController = new PlayBackController(mediaPlayerComponent.mediaPlayer(), null);
 
         background = new Color(40, 40, 40);
         this.setLayout(new BorderLayout());
@@ -46,10 +38,10 @@ public class PlayerPanel extends JPanel {
         centerConsole.setPreferredSize(new Dimension(80,30));
         centerConsole.setLayout(new BorderLayout());
 
-        playerControlsPanel = new PlayerControlsPanel(mediaPlayer);
-        playerRadioControlsPanel = new PlayerRadioControlsPanel(mediaPlayer);
+        playerControlsPanel = new PlayerControlsPanel(playBackController);
+        playerRadioControlsPanel = new PlayerRadioControlsPanel(mediaPlayerComponent.mediaPlayer());
 
-        progressBarPanel = new ProgressBarPanel(mediaPlayer);
+        progressBarPanel = new ProgressBarPanel(mediaPlayerComponent.mediaPlayer());
 
         updateCenterConsole();
 
@@ -58,8 +50,12 @@ public class PlayerPanel extends JPanel {
         songInfoPanel = new SongInfoPanel();
         this.add(songInfoPanel, BorderLayout.WEST);
 
-        volumeSliderPanel = new VolumeSliderPanel(mediaPlayer);
+        volumeSliderPanel = new VolumeSliderPanel(mediaPlayerComponent.mediaPlayer());
         this.add(volumeSliderPanel, BorderLayout.EAST);
+    }
+
+    public PlayBackController getPlayBackController() {
+        return playBackController;
     }
 
     public PlayerControlsPanel getPlayerControlsPanel() {
@@ -90,7 +86,7 @@ public class PlayerPanel extends JPanel {
     }
 
     public MediaPlayerFactory getMediaPlayerFactory() {
-        return mediaPlayerFactory;
+        return mediaPlayerComponent.mediaPlayerFactory();
     }
 
     public MediaPlayer getMediaPlayer() {

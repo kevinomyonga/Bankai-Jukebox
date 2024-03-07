@@ -59,6 +59,9 @@ class VideosPanelContent extends JPanel {
                 button.setVerticalTextPosition(AbstractButton.BOTTOM);
                 button.setHorizontalTextPosition(AbstractButton.CENTER);
                 button.addActionListener(e -> {
+                    // Update Controls Panel
+                    playerPanel.getPlayerControlsPanel();
+
                     ArrayList<File> videoQueue = new ArrayList<>();
                     videoQueue.add(file);
                     new VideoPlayer(playerPanel.getMediaPlayerComponent(), videoQueue);

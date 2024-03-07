@@ -42,7 +42,8 @@ public class VolumeSliderPanel extends JPanel {
     private JSlider createSlider() {
         JSlider slider = new JSlider();
         slider.setMinimum(0);
-        slider.setMaximum(100);
+        slider.setMaximum(200);
+        slider.setValue(100);
         slider.setToolTipText("Volume");
         slider.setPreferredSize(new Dimension(130, 25));
         return slider;
