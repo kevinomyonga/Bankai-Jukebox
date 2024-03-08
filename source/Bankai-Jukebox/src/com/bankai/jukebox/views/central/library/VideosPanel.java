@@ -1,6 +1,7 @@
 package com.bankai.jukebox.views.central.library;
 
 import com.bankai.jukebox.config.Constants;
+import com.bankai.jukebox.utils.ThumbnailGenerator;
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;
 import com.bankai.jukebox.views.video.VideoPlayer;
@@ -28,7 +29,7 @@ public class VideosPanel extends JPanel {
 
 class VideosPanelContent extends JPanel {
 
-    int WIDTH = 150, HEIGHT = 150;
+    int WIDTH = 200, HEIGHT = 200;
 
     private final PlayerPanel playerPanel;
 
@@ -66,6 +67,16 @@ class VideosPanelContent extends JPanel {
                     videoQueue.add(file);
                     new VideoPlayer(playerPanel.getMediaPlayerComponent(), videoQueue);
                 });
+
+                // Load image asynchronously
+                new Thread(() -> {
+                    try {
+                        ImageIcon thumbnail = new ImageIcon(new ThumbnailGenerator().generateThumbnail(file, WIDTH, HEIGHT));
+                        button.setIcon(thumbnail);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
 
                 add(button);
             } catch (Exception e) {
