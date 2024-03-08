@@ -54,7 +54,7 @@ class VideosPanelContent extends JPanel {
                         VideosPanel.class.getClassLoader().getResource("images/no-artwork.jpg")));
 
                 JButton button = new JButton(defaultImageIcon);
-                button.setPreferredSize(new Dimension(150, 150));
+                button.setPreferredSize(new Dimension(150, 200));
                 button.setText(file.getName());
                 button.setToolTipText(file.getName());
                 button.setVerticalTextPosition(AbstractButton.BOTTOM);
@@ -71,7 +71,7 @@ class VideosPanelContent extends JPanel {
                 // Load image asynchronously
                 new Thread(() -> {
                     try {
-                        ImageIcon thumbnail = new ImageIcon(new ThumbnailGenerator().generateThumbnail(file, WIDTH, HEIGHT));
+                        ImageIcon thumbnail = new ImageIcon(new ThumbnailGenerator().generateThumbnail(file, WIDTH, HEIGHT-50));
                         button.setIcon(thumbnail);
                     } catch (Exception e) {
                         e.printStackTrace();

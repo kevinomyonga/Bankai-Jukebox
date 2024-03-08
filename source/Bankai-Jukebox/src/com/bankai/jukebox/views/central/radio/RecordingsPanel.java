@@ -1,6 +1,8 @@
 package com.bankai.jukebox.views.central.radio;
 
 import com.bankai.jukebox.config.Constants;
+import com.bankai.jukebox.utils.AlternateRowColorRenderer;
+import com.bankai.jukebox.views.SearchPanel;
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;
 
@@ -8,6 +10,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,14 +35,17 @@ public class RecordingsPanel extends JPanel {
     }
 }
 
-class RecordingsPanelContent extends JPanel {
+class RecordingsPanelContent extends JPanel implements SearchPanel.SearchListener {
 
     private PlayerPanel playerPanel;
 
     private ArrayList<File> recordingFiles;
+    private ArrayList<File> filteredRecordingFiles;
+
+    private SearchPanel searchPanel;
 
     private JTable table;
-    private DefaultTableModel model;
+    private DefaultTableModel tableModel;
 
     public RecordingsPanelContent(PlayerPanel playerPanel) {
         super();
@@ -47,9 +54,12 @@ class RecordingsPanelContent extends JPanel {
 
         this.playerPanel = playerPanel;
 
-        String folderPath = Constants.APP_RECORDINGS_DIRECTORY; // Change this to your folder path
+        String folderPath = Constants.APP_RECORDINGS_DIRECTORY;
 
         System.out.println("Folder path used: " + folderPath);
+
+        searchPanel = new SearchPanel(this); // Pass 'this' as the search listener
+        add(searchPanel, BorderLayout.NORTH);
 
         TableColumn column0 = new TableColumn(0);
         column0.setHeaderValue("#");
@@ -63,32 +73,53 @@ class RecordingsPanelContent extends JPanel {
         TableColumn column3 = new TableColumn(3);
         column3.setHeaderValue("Actions");
 
-        model = new DefaultTableModel();
-        model.addColumn(column0.getHeaderValue());
-        model.addColumn(column1.getHeaderValue());
-        model.addColumn(column2.getHeaderValue());
-        model.addColumn(column3.getHeaderValue());
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn(column0.getHeaderValue());
+        tableModel.addColumn(column1.getHeaderValue());
+        tableModel.addColumn(column2.getHeaderValue());
+        tableModel.addColumn(column3.getHeaderValue());
 
-        table = new JTable(model);
+        table = new JTable(tableModel);
         // Adjusting column widths
         table.getColumnModel().getColumn(0).setPreferredWidth(50);
         table.getColumnModel().getColumn(1).setPreferredWidth(150);
         table.getColumnModel().getColumn(2).setPreferredWidth(400);
         table.getColumnModel().getColumn(3).setPreferredWidth(200);
 
-        table.setRowHeight(50);
-        table.setRowMargin(10);
+//        table.setRowHeight(50);
+//        table.setRowMargin(10);
 //        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Table width fill the available space
         table.getTableHeader().setReorderingAllowed(true); // Prevent column reordering
 //        table.setRowSelectionAllowed(false); // Disable row selection
         table.setDefaultEditor(Object.class, null); // Prevent editing cell content
+
+        // Set custom cell renderer for alternate row color
+        table.setDefaultRenderer(Object.class, new AlternateRowColorRenderer());
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.add(table, BorderLayout.CENTER);
         tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
         add(tablePanel, BorderLayout.CENTER);
 
-        recordingFiles = getVideoFiles(folderPath);
+        recordingFiles = getAudioFiles(folderPath);
+        filteredRecordingFiles = new ArrayList<>(recordingFiles);
+        displayRecordings(filteredRecordingFiles);
+
+        table.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                JTable table =(JTable) e.getSource();
+                Point point = e.getPoint();
+
+                if (e.getClickCount() == 2) {
+                    int selectedRow = table.rowAtPoint(point);
+                    if (selectedRow != -1) {
+                        playerPanel.getPlayBackController().play(filteredRecordingFiles.get(selectedRow).getAbsolutePath());
+
+                        System.out.println("Recording selected: " + filteredRecordingFiles.get(selectedRow).getName());
+                    }
+                }
+            }
+        });
 
 //        for (File file : recordingFiles) {
 //            try {
@@ -120,7 +151,7 @@ class RecordingsPanelContent extends JPanel {
         setVisible(true);
     }
 
-    private ArrayList<File> getVideoFiles(String folderPath) {
+    private ArrayList<File> getAudioFiles(String folderPath) {
         ArrayList<File> files = new ArrayList<>();
         File folder = new File(folderPath);
         File[] listOfFiles = folder.listFiles();
@@ -132,32 +163,17 @@ class RecordingsPanelContent extends JPanel {
             // Sort files by date, latest first
             fileList.sort(Comparator.comparingLong(File::lastModified).reversed());
 
-            int count = 1;
             for (File file : listOfFiles) {
 
-                if (file.isFile() && isVideoFile(file.getName())) {
+                if (file.isFile() && isAudioFile(file.getName())) {
                     files.add(file);
-
-                    String dateCreated = extractDateCreated(file.getName());
-                    String fileName = file.getName();
-
-                    JButton playButton = new JButton("Play");
-                    playButton.addActionListener(e -> playFile(file));
-                    JButton deleteButton = new JButton("Delete");
-                    deleteButton.addActionListener(e -> deleteFile(file));
-
-                    JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
-                    buttonPanel.add(playButton);
-                    buttonPanel.add(deleteButton);
-
-                    model.addRow(new Object[]{count++, dateCreated, fileName, buttonPanel});
                 }
             }
         }
         return files;
     }
 
-    private boolean isVideoFile(String fileName) {
+    private boolean isAudioFile(String fileName) {
         String[] videoExtensions = {".mp3"}; // Add more extensions if needed
         for (String extension : videoExtensions) {
             if (fileName.toLowerCase().endsWith(extension)) {
@@ -182,11 +198,6 @@ class RecordingsPanelContent extends JPanel {
         }
     }
 
-    private void playFile(File file) {
-        // Add code to play the file here
-        System.out.println("Playing: " + file.getName());
-    }
-
     private void deleteFile(File file) {
         int choice = JOptionPane.showConfirmDialog(this,
                 "Are you sure you want to delete " + file.getName() + "?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
@@ -195,10 +206,47 @@ class RecordingsPanelContent extends JPanel {
             if (deleted) {
                 JOptionPane.showMessageDialog(this, "File deleted successfully!");
                 // Refresh the table after deletion
-                model.removeRow(table.getSelectedRow());
+                tableModel.removeRow(table.getSelectedRow());
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to delete the file.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void filterRecordings(String searchText) {
+        filteredRecordingFiles.clear();
+        for (File file : recordingFiles) {
+            if (file.getName().toLowerCase().contains(searchText.toLowerCase())) {
+                filteredRecordingFiles.add(file);
+            }
+        }
+        displayRecordings(filteredRecordingFiles);
+    }
+
+    private void displayRecordings(ArrayList<File> files) {
+        tableModel.setRowCount(0);
+        int fileNumber = 1;
+
+        for (File file : files) {
+            String dateCreated = extractDateCreated(file.getName());
+            String fileName = file.getName();
+
+            JButton playButton = new JButton("Play");
+            playButton.addActionListener(e -> {});
+            JButton deleteButton = new JButton("Delete");
+            deleteButton.addActionListener(e -> deleteFile(file));
+
+            JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
+            buttonPanel.add(playButton);
+            buttonPanel.add(deleteButton);
+
+            tableModel.addRow(new Object[]{fileNumber++, dateCreated, fileName, buttonPanel});
+        }
+    }
+
+    // Implementation of SearchPanel.SearchListener
+    @Override
+    public void onSearch(String searchText) {
+        filterRecordings(searchText);
     }
 }

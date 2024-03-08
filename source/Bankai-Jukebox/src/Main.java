@@ -19,8 +19,8 @@ public class Main {
 //        Jukebox jukebox = new Jukebox();
 //        jukebox.guiLaunch();
 
-//        SplashScreen splashScreen = new SplashScreen(3000);
-//        splashScreen.showSplash();
+        SplashScreen splashScreen = new SplashScreen(3000);
+        splashScreen.showSplash();
 
         new HomePage();
     }

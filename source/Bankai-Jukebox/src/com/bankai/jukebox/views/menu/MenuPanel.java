@@ -12,7 +12,6 @@ public class MenuPanel extends JPanel {
     private CentralPanel centralPanel;
     private JSeparator jSeparator;
     private JLabel libraryLabel;
-    private JButton fileChooserBtn;
     private JButton songsBtn;
     private JButton albumsBtn;
     private JButton videosBtn;
@@ -27,6 +26,7 @@ public class MenuPanel extends JPanel {
     private JLabel moreLabel;
     private JButton settingsBtn;
     private JButton aboutBtn;
+    private JButton exitBtn;
 
     public MenuPanel(CentralPanel centralPanel) {
         super();
@@ -76,24 +76,6 @@ public class MenuPanel extends JPanel {
         videosBtn.setHorizontalAlignment(SwingConstants.LEFT);
         videosBtn.addActionListener(e -> centralPanel.showVideosPanel());
         add(videosBtn);
-
-        /*
-          This button is for adding a new song to the program
-         */
-        fileChooserBtn = new JButton("Add To Library");
-        fileChooserBtn.setFont(new Font("Arial", Font.BOLD, 12));
-        fileChooserBtn.setHorizontalAlignment(SwingConstants.LEFT);
-        fileChooserBtn.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileFilter(new FileNameExtensionFilter(".mp3 files", "mp3"));
-            fileChooser.setCurrentDirectory(new File("E:/"));
-            int result = fileChooser.showOpenDialog(fileChooser);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-//                    saveSong(addSong(selectedFile.getAbsolutePath()));
-            }
-        });
-        add(fileChooserBtn);
 
         add(Box.createRigidArea(new Dimension(0, 1)));
 
@@ -188,6 +170,17 @@ public class MenuPanel extends JPanel {
         aboutBtn.setHorizontalAlignment(SwingConstants.LEFT);
         aboutBtn.addActionListener(e -> centralPanel.showAboutPanel());
         add(aboutBtn);
+
+        add(Box.createRigidArea(new Dimension(0, 1)));
+
+        /*
+          This button exits the app
+         */
+        exitBtn = new JButton("Exit");
+        exitBtn.setFont(new Font("Arial", Font.BOLD, 12));
+        exitBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        exitBtn.addActionListener(e -> System.exit(0));
+        add(exitBtn);
 
         setVisible(true);
     }

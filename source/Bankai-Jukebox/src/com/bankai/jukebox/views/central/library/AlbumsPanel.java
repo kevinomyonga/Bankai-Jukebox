@@ -21,7 +21,7 @@ public class AlbumsPanel extends JPanel {
 
         add(new TitleText("Albums"));
 
-        add(new SongsPanelContent(playerPanel));
+        add(new AlbumsPanelContent(playerPanel));
 
         setVisible(true);
     }
