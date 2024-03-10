@@ -1,5 +1,5 @@
 # Bankai-Jukebox
- Virtual Jukebox Simulation Project By The Bankai Group. For The MIS6030 Class.
+ Virtual Jukebox Simulation Project By The Bankai Group. For The MIS6030 Class (Spring 2024).
 
  ## Group Members
  1. Kevin Nyende Omyonga

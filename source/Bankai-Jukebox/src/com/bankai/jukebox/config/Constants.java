@@ -19,7 +19,7 @@ public class Constants {
     /**
      * A constant field to denote the value of APP_DESCRIPTION.
      */
-    public static final String APP_DESCRIPTION = "Virtual Jukebox Simulation Project By The Bankai Group";
+    public static final String APP_DESCRIPTION = "Virtual Jukebox Simulation Project By The Bankai Group For The MIS6030 Class (Spring 2024).";
 
     /**
      * A constant field to denote the value of APP_VERSION.

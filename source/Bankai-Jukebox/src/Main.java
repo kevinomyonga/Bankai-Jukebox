@@ -16,9 +16,6 @@ public class Main {
 
         FlatMacLightLaf.setup();
 
-//        Jukebox jukebox = new Jukebox();
-//        jukebox.guiLaunch();
-
         SplashScreen splashScreen = new SplashScreen(3000);
         splashScreen.showSplash();
 
