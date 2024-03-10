@@ -42,7 +42,7 @@ class VideosPanelContent extends JPanel {
 
         this.playerPanel = playerPanel;
 
-        String folderPath = Constants.APP_VIDEOS_DIRECTORY; // Change this to your folder path
+        String folderPath = Constants.APP_VIDEOS_DIRECTORY;
 
         System.out.println("Folder path used: " + folderPath);
 
@@ -52,6 +52,10 @@ class VideosPanelContent extends JPanel {
             try {
                 ImageIcon defaultImageIcon = new ImageIcon(Objects.requireNonNull(
                         VideosPanel.class.getClassLoader().getResource("images/no-artwork.jpg")));
+
+                Image img = defaultImageIcon.getImage();
+                Image resizedImg = img.getScaledInstance(WIDTH, HEIGHT-50, Image.SCALE_SMOOTH);
+                defaultImageIcon = new ImageIcon(resizedImg);
 
                 JButton button = new JButton(defaultImageIcon);
                 button.setPreferredSize(new Dimension(150, 200));
@@ -71,7 +75,7 @@ class VideosPanelContent extends JPanel {
                 // Load image asynchronously
                 new Thread(() -> {
                     try {
-                        ImageIcon thumbnail = new ImageIcon(new ThumbnailGenerator().generateThumbnail(file, WIDTH, HEIGHT-50));
+                        ImageIcon thumbnail = new ImageIcon(new ThumbnailGenerator().generateThumbnail(file, WIDTH, HEIGHT-50, null));
                         button.setIcon(thumbnail);
                     } catch (Exception e) {
                         e.printStackTrace();

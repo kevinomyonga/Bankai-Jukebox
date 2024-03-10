@@ -5,11 +5,9 @@ import com.bankai.jukebox.utils.AlternateRowColorRenderer;
 import com.bankai.jukebox.views.SearchPanel;
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;
-import com.bankai.jukebox.views.video.VideoPlayer;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,7 +21,6 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 public class SongsPanel extends JPanel {
 
