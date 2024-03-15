@@ -57,6 +57,11 @@ public class Constants {
     public static final String APP_MUSIC_DIRECTORY = APP_DIRECTORY + File.separator + "Music";
 
     /**
+     * A constant field to denote the value of APP_MUSIC_ARTWORK_DIRECTORY.
+     */
+    public static final String APP_MUSIC_ARTWORK_DIRECTORY = APP_MUSIC_DIRECTORY + File.separator + "Artwork";
+
+    /**
      * A constant field to denote the value of APP_VIDEOS_DIRECTORY.
      */
     public static final String APP_VIDEOS_DIRECTORY = APP_DIRECTORY + File.separator + "Videos";
@@ -85,4 +90,9 @@ public class Constants {
      * A constant field to denote the value of APP_WINDOW_PREFERRED_WIDTH and APP_WINDOW_PREFERRED_HEIGHT.
      */
     public static final int APP_WINDOW_PREFERRED_WIDTH = 1280, APP_WINDOW_PREFERRED_HEIGHT = 800;
+
+    /**
+     * A constant field to denote the value of APP_DB_NAME.
+     */
+    public static final String APP_DB_NAME = APP_NAME.replace(" ", "");
 }

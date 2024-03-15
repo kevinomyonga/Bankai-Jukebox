@@ -1,5 +1,6 @@
 package com.bankai.jukebox.controllers;
 
+import com.bankai.jukebox.models.Song;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import java.io.File;
@@ -12,11 +13,11 @@ public class PlayBackController {
     // The MediaPlayer instance associated with this controller
     private final MediaPlayer mediaPlayer;
 
-    private ArrayList<Object> songQueue = new ArrayList<>(); // an Arraylist of songs that are playable, switch between them by queueIndex;
+    private ArrayList<Song> songQueue = new ArrayList<>(); // an Arraylist of songs that are playable, switch between them by queueIndex;
     private int queueIndex = 0; // controller of which songs to play
 
 
-    public PlayBackController(MediaPlayer mediaPlayer, ArrayList<Object> songsToAdd) {
+    public PlayBackController(MediaPlayer mediaPlayer, ArrayList<Song> songsToAdd) {
         // Initialize the MediaPlayer
         this.mediaPlayer = mediaPlayer;
 
@@ -51,15 +52,15 @@ public class PlayBackController {
      *
      * @param songInQueue the song about to be played
      */
-//    public void play(Song songInQueue) {
-//        if (songQueue.contains(songInQueue)){
-//            queueIndex = songQueue.indexOf(songInQueue);
-//            mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
-//        }else{
-//            songQueue.add(queueIndex, songInQueue);
-//            mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
-//        }
-//    }
+    public void play(Song songInQueue) {
+        if (songQueue.contains(songInQueue)){
+            queueIndex = songQueue.indexOf(songInQueue);
+            mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
+        }else{
+            songQueue.add(queueIndex, songInQueue);
+            mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
+        }
+    }
 
     /**
      * shuffles playlist by stopping the player and shuffling song queue and then playing the player
@@ -69,7 +70,7 @@ public class PlayBackController {
             mediaPlayer.controls().stop();
             Collections.shuffle(songQueue);
             queueIndex = 0;
-//            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
+            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
         }
     }
 
@@ -92,7 +93,7 @@ public class PlayBackController {
             } else {
                 queueIndex = 0;
             }
-            mediaPlayer.media().play(new File(String.valueOf(songQueue.get(queueIndex))).getAbsolutePath());
+            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
         }
     }
 
@@ -107,7 +108,7 @@ public class PlayBackController {
                 // Reset queue
                 queueIndex = 0;
             }
-            System.out.println(mediaPlayer.media().play(new File(String.valueOf(songQueue.get(queueIndex))).getAbsolutePath()));
+            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
         }
     }
 
@@ -122,5 +123,18 @@ public class PlayBackController {
 
     public void shouldRepeat(boolean repeat) {
         mediaPlayer.controls().setRepeat(repeat);
+    }
+
+    public void resetQueue(ArrayList<Song> newQueue){
+        songQueue = newQueue;
+        queueIndex = 0;
+    }
+
+    public void setQueueIndex(int index){
+        if (index >= songQueue.size()){
+            queueIndex = 0;
+        }else{
+            queueIndex = index;
+        }
     }
 }

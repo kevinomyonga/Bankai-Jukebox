@@ -1,6 +1,7 @@
 package com.bankai.jukebox.pages;
 
 import com.bankai.jukebox.config.Constants;
+import com.bankai.jukebox.utils.database.DatabaseHandler;
 import com.bankai.jukebox.views.central.CentralPanel;
 import com.bankai.jukebox.views.menu.MenuPanel;
 import com.bankai.jukebox.views.player.PlayerPanel;
@@ -9,9 +10,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HomePage extends JFrame {
+    public static DatabaseHandler databaseHandler;
 
-    public HomePage() {
+    public HomePage(DatabaseHandler databaseHandler) {
         super(Constants.APP_NAME); // Set the title of the JFrame
+
+        HomePage.databaseHandler = databaseHandler;
 
         initializeWindow(); // Initialize window properties
         addComponents(); // Add components to the JFrame
@@ -58,9 +62,5 @@ public class HomePage extends JFrame {
         this.setResizable(false); // Disable resizing of the JFrame
         this.pack(); // Pack components within the JFrame
         this.setVisible(true); // Make the JFrame visible
-    }
-
-    public static void main(String[] args) {
-        new HomePage();
     }
 }
