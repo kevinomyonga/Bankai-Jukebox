@@ -2,6 +2,7 @@ package com.bankai.jukebox.views.player;
 
 import com.bankai.jukebox.config.Icons;
 import com.bankai.jukebox.controllers.PlayBackController;
+import com.bankai.jukebox.utils.playback.SimplePlaybackListener;
 
 import javax.swing.*;
 import java.util.Objects;

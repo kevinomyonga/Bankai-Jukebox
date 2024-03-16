@@ -44,6 +44,8 @@ public interface DatabaseHandler {
 
     ArrayList<User> getUserByUsername(String username, DatabaseHandler handler);
 
+    ArrayList<User> getUserByOnlineStatus(boolean isOnline, DatabaseHandler handler);
+
     Album getAlbumByID(int ID);
 
     Playlist getPlaylistByID(int ID);

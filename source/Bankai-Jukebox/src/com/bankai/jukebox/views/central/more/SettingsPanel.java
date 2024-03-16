@@ -35,8 +35,6 @@ class SettingsPanelContent extends JPanel {
 
         this.setLayout(new GridLayout(0, 4, 20, 20));
 
-
-
         /*
           This is the theme change section
          */

@@ -137,4 +137,49 @@ public class PlayBackController {
             queueIndex = index;
         }
     }
+
+    public Song getCurrentSong() {
+        return songQueue.get(queueIndex);
+    }
+
+    public ArrayList<Song> getSongQueue() {
+        return songQueue;
+    }
+
+    /**
+     * method to get current playback time
+     * @return time passed in milliseconds
+     */
+    public int getSec() {
+//        return player.getCurrentFrame() * 26;
+        return (int) (mediaPlayer.status().position()* mediaPlayer.status().length());
+    }
+
+    /**
+     * jumps to the given milisecond of song
+     *
+     * @param milliseconds - remember that each frame lasts 26 mili seconds. so in order to jump to i'th second we must go to i*60000/26'th frame
+     */
+
+    public void move(int milliseconds) {
+        if (!songQueue.isEmpty()) {
+            if (mediaPlayer.status().isSeekable()){
+                mediaPlayer.controls().setTime(milliseconds);
+            }
+//            if (player == null) {
+//                initPlayer();
+//            } else if (!this.player.isPaused() || player.isComplete() || player.isStopped()) {
+//                stop();
+//                initPlayer();
+//            }
+//            executorService.execute(() -> {
+//                try {
+//                    playbackListener.playbackStarted(null);
+//                    player.play((milliseconds) / 26);
+//                } catch (JavaLayerException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+        }
+    }
 }

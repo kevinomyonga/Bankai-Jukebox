@@ -1,6 +1,7 @@
 package com.bankai.jukebox.views.player;
 
 import com.bankai.jukebox.controllers.PlayBackController;
+import com.bankai.jukebox.utils.playback.SimplePlaybackListener;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent;
@@ -26,6 +27,8 @@ public class PlayerPanel extends JPanel {
     public PlayerPanel() {
         super();
 
+        this.setPreferredSize(new Dimension(1200, 80));
+
         mediaPlayerComponent = new CallbackMediaPlayerComponent();
 
         playBackController = new PlayBackController(mediaPlayerComponent.mediaPlayer(), null);
@@ -41,17 +44,19 @@ public class PlayerPanel extends JPanel {
         playerControlsPanel = new PlayerControlsPanel(playBackController);
         playerRadioControlsPanel = new PlayerRadioControlsPanel(mediaPlayerComponent.mediaPlayer());
 
-        progressBarPanel = new ProgressBarPanel(mediaPlayerComponent.mediaPlayer());
+        progressBarPanel = new ProgressBarPanel(playBackController);
 
         updateCenterConsole();
 
         this.add(centerConsole, BorderLayout.CENTER);
 
-        songInfoPanel = new SongInfoPanel();
+        songInfoPanel = new SongInfoPanel(playBackController);
         this.add(songInfoPanel, BorderLayout.WEST);
 
         volumeSliderPanel = new VolumeSliderPanel(mediaPlayerComponent.mediaPlayer());
         this.add(volumeSliderPanel, BorderLayout.EAST);
+
+        playBackController.getMediaPlayer().events().addMediaPlayerEventListener(new SimplePlaybackListener(this));
     }
 
     public PlayBackController getPlayBackController() {
@@ -95,5 +100,13 @@ public class PlayerPanel extends JPanel {
 
     public CallbackMediaPlayerComponent getMediaPlayerComponent() {
         return mediaPlayerComponent;
+    }
+
+    public ProgressBarPanel getProgressBarPanel() {
+        return progressBarPanel;
+    }
+
+    public SongInfoPanel getSongInfoPanel() {
+        return songInfoPanel;
     }
 }

@@ -807,6 +807,79 @@ public class DatabaseHelper implements DatabaseHandler {
         return users;
     }
 
+    /**
+     * gets Usernames with username like the enterd username
+     * if you enter the exact username get the user object by get(0)<br>
+     * <b>the user does' not contain friend information</b>
+     * <br>
+     * <b>this method uses several other queries to finish so make sure to use it inside another thread</b>
+     *
+     * @param isOnline the online status of the user
+     * @return an arraylist of user objects with similar username
+     */
+    public ArrayList<User> getUserByOnlineStatus(boolean isOnline, DatabaseHandler handler) {
+        String query = "SELECT * FROM Users WHERE online LIKE ?";
+        ArrayList<User> users = new ArrayList<>();
+        PreparedStatement statement;
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, "%" + isOnline + "%");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User(resultSet.getString("username"), resultSet.getString("password"));
+                ArrayList<Song> recentSongs = new ArrayList<>();
+                ArrayList<Song> likedSongs = new ArrayList<>();
+                if (!resultSet.getString("albums").isEmpty()) {
+                    for (String song : resultSet.getString("recentlyPlayed").split(Song.HASH_SEPERATOR)) {
+                        Song foundSong = handler.getSongByHash(song);
+                        if (foundSong != null) {
+                            recentSongs.add(foundSong);
+                        }
+                    }
+                }
+                if (!resultSet.getString("likedSongs").isEmpty()) {
+                    for (String song : resultSet.getString("likedSongs").split(Song.HASH_SEPERATOR)) {
+                        Song foundSong = handler.getSongByHash(song);
+                        if (foundSong != null) {
+                            likedSongs.add(foundSong);
+                        }
+                    }
+                }
+                ArrayList<Album> albums = new ArrayList<>();
+                ArrayList<Playlist> playlists = new ArrayList<>();
+                if (!resultSet.getString("albums").isEmpty()) {
+                    for (String album : resultSet.getString("albums").split(Song.HASH_SEPERATOR)) {
+                        Album foundAlbum = handler.getAlbumByID(Integer.parseInt(album));
+                        if (foundAlbum != null) {
+                            albums.add(foundAlbum);
+                        }
+                    }
+                }
+                if (!resultSet.getString("playlists").isEmpty()) {
+                    for (String playlist : resultSet.getString("playlists").split(Song.HASH_SEPERATOR)) {
+                        Playlist foundPlaylist = handler.getPlaylistByID(Integer.parseInt(playlist));
+                        if (foundPlaylist != null) {
+                            playlists.add(foundPlaylist);
+                        }
+                    }
+                }
+                user.setAlbums(albums);
+                user.setPlaylists(playlists);
+                user.setLikedSongs(likedSongs);
+//                user.setOnline(resultSet.getInt("online")==1);
+                user.setLastOnline(resultSet.getLong("lastOnline"));
+                user.setSongs(recentSongs);
+                user.setCurrentSong(null);
+                user.setFriends(resultSet.getString("friends"));
+                user.setProfileImage(URI.create(resultSet.getString("profileImage")));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
     public void removeUser(String username) {
         String query = "DELETE FROM Users WHERE username = ?";
         PreparedStatement statement = null;

@@ -63,7 +63,7 @@ public class LoginPage extends JFrame {
     private void addComponents() {
         container = new JPanel();
         container.setLayout(new BorderLayout());
-        container.add(mediaPlayerComponent, BorderLayout.CENTER);
+        container.add(mediaPlayerComponent);
 
         this.setContentPane(container);
 
@@ -79,16 +79,16 @@ public class LoginPage extends JFrame {
             }
         });
 
-        SignInPanel signInPanel = new SignInPanel(databaseHandler);
+        SignInPanel signInPanel = new SignInPanel(databaseHandler, this);
         this.add(signInPanel, BorderLayout.WEST);
 
-        SignUpPanel signUpPanel = new SignUpPanel(databaseHandler);
+        SignUpPanel signUpPanel = new SignUpPanel(databaseHandler, this);
         this.add(signUpPanel, BorderLayout.EAST);
     }
 
     // Method to set JFrame properties
     private void setWindowProperties() {
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Prevent default close operation
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Prevent default close operation
         this.setLocationRelativeTo(null); // Center the JFrame on the screen
         this.setResizable(false); // Disable resizing of the JFrame
         this.pack(); // Pack components within the JFrame
@@ -123,5 +123,9 @@ public class LoginPage extends JFrame {
         mediaPlayerComponent.mediaPlayer().controls().stop();
         mediaPlayerComponent.mediaPlayer().release();
         mediaPlayerComponent.mediaPlayerFactory().release();
+    }
+
+    public void closeFrame(){
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 }

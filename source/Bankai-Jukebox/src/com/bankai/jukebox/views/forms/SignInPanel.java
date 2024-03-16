@@ -1,8 +1,10 @@
 package com.bankai.jukebox.views.forms;
 
+import com.bankai.jukebox.Main;
 import com.bankai.jukebox.models.Song;
 import com.bankai.jukebox.models.User;
 import com.bankai.jukebox.pages.HomePage;
+import com.bankai.jukebox.pages.LoginPage;
 import com.bankai.jukebox.utils.IO.FileIO;
 import com.bankai.jukebox.utils.database.DatabaseConnection;
 import com.bankai.jukebox.utils.database.DatabaseHandler;
@@ -27,7 +29,7 @@ public class SignInPanel extends JPanel {
     private JPanel userNamePanel = new JPanel();
     private JPanel passPanel = new JPanel();
 
-    public SignInPanel(DatabaseHandler databaseHandler){
+    public SignInPanel(DatabaseHandler databaseHandler, LoginPage loginPage){
         this.databaseHandler = databaseHandler;
 
 //        this.setBackground(new Color(22,22,22));
@@ -63,8 +65,6 @@ public class SignInPanel extends JPanel {
 
         // sign in button init
         signInButton.setText("Sign In");
-//        signInButton.setBackground(new Color(97,97,97));
-//        signInButton.setForeground(Color.WHITE);
 
         // what to do for login
 
@@ -77,7 +77,7 @@ public class SignInPanel extends JPanel {
                     System.out.println("Logged in");
                     user.setOnline(true);
                     user.setLastOnline(new Date().getTime());
-//                        Main.user = user;
+                    Main.user = user;
 
                     // getting friends from database
                     for (String friendsName : user.getFriends().split(Song.HASH_SEPERATOR)){
@@ -91,7 +91,8 @@ public class SignInPanel extends JPanel {
                     databaseHandler.removeUser(user.getUsername());
                     databaseHandler.addUser(user);
 
-//                        Main.closeFrame();
+                    loginPage.closeFrame();
+
                     new HomePage(databaseHandler);
                 } else {
                     welcomeLabel.setText("Try again !");
@@ -106,12 +107,11 @@ public class SignInPanel extends JPanel {
         // init sign up button
 
         createAccount.setText("Don't have an account? Create one");
-        createAccount.setBackground(new Color(97,97,97));
-        createAccount.setForeground(Color.WHITE);
+
         // what to do for signing up :
         createAccount.addActionListener(actionEvent -> {
             this.removeAll();
-            SignUpPanel signUpPanel = new SignUpPanel(databaseHandler);
+            SignUpPanel signUpPanel = new SignUpPanel(databaseHandler, loginPage);
             this.add(signUpPanel);
             this.validate();
             this.repaint();

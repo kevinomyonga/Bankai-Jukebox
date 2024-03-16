@@ -4,6 +4,7 @@ import com.bankai.jukebox.models.Album;
 import com.bankai.jukebox.models.Song;
 import com.bankai.jukebox.models.User;
 import com.bankai.jukebox.pages.HomePage;
+import com.bankai.jukebox.pages.LoginPage;
 import com.bankai.jukebox.utils.IO.BJFileChooser;
 import com.bankai.jukebox.utils.IO.FileIO;
 import com.bankai.jukebox.utils.TagReader;
@@ -32,7 +33,7 @@ public class SignUpPanel  extends JPanel {
     private JPanel userNamePanel = new JPanel();
     private URI profileImageURI = new File(FileIO.RESOURCES_RELATIVE + "icons" + File.separator + "noprofile.png").toURI();
 
-    public SignUpPanel(DatabaseHandler databaseHandler) {
+    public SignUpPanel(DatabaseHandler databaseHandler, LoginPage loginPage) {
         this.databaseHandler = databaseHandler;
 
 //        this.setBackground(new Color(22, 22, 22));
@@ -101,7 +102,7 @@ public class SignUpPanel  extends JPanel {
                     createAccountLabel.setForeground(Color.GREEN);
                     this.validate();
                     this.repaint();
-//                    Main.user = user;
+//                    com.bankai.jukebox.Main.user = user;
                     user.setOnline(true);
                     user.setLastOnline(new Date().getTime());
                     user.setFriends("");
@@ -141,7 +142,8 @@ public class SignUpPanel  extends JPanel {
                     }
 
                     new HomePage(databaseHandler);
-//                    Main.closeFrame();
+
+                    loginPage.closeFrame();
                 }
             } else {
                 createAccountLabel.setText("Invalid input !");
