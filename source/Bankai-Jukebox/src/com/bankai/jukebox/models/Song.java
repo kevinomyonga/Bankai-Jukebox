@@ -19,7 +19,7 @@ public class Song implements Serializable {
     private final String album;
     private URI artWork;
     private final int length;
-    private final int playCount;
+    private int playCount;
     private long playDate;
     private URI location;
     private final boolean playing;
@@ -72,6 +72,10 @@ public class Song implements Serializable {
 
     public int getPlayCount() {
         return playCount;
+    }
+
+    public void setPlayCount(int playCount) {
+        this.playCount = playCount;
     }
 
     public long getPlayDate() {

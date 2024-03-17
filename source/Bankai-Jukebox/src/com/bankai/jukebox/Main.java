@@ -26,8 +26,8 @@ public class Main {
             System.setProperty("apple.awt.application.name", Constants.APP_NAME);
         }
 
-        FlatMacDarkLaf.registerCustomDefaultsSource("com.bankai.jukebox.themes");
-        FlatMacLightLaf.registerCustomDefaultsSource("com.bankai.jukebox.themes");
+        FlatMacDarkLaf.registerCustomDefaultsSource("themes");
+        FlatMacLightLaf.registerCustomDefaultsSource("themes");
 
         FlatMacDarkLaf.setup();
         FlatMacLightLaf.setup();
@@ -43,7 +43,7 @@ public class Main {
 
         // Check if user is already logged in
         ArrayList<User> users;
-        if (!(users = databaseHandler.getUserByOnlineStatus(true, databaseHandler)).isEmpty()) {
+        if ((users = databaseHandler.getUserByOnlineStatus(true, databaseHandler)).isEmpty()) {
             user = users.getFirst();
 
             new HomePage(databaseHandler);

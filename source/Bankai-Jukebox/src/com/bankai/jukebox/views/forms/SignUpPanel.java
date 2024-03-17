@@ -36,6 +36,8 @@ public class SignUpPanel  extends JPanel {
     public SignUpPanel(DatabaseHandler databaseHandler, LoginPage loginPage) {
         this.databaseHandler = databaseHandler;
 
+        this.setOpaque(false);
+
 //        this.setBackground(new Color(22, 22, 22));
         userNamePanel.setLayout(new BorderLayout());
         passPanel.setLayout(new BorderLayout());

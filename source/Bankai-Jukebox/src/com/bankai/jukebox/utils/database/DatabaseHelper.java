@@ -22,13 +22,11 @@ public class DatabaseHelper implements DatabaseHandler {
         this.connection = connection;
     }
 
-    public void deleteAlbum() {
-
-    }
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
+
+    public void deleteAlbum() {}
 
     /**
      * this method removes song from database and alters album and playlist's tables
@@ -823,7 +821,7 @@ public class DatabaseHelper implements DatabaseHandler {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, "%" + isOnline + "%");
+            statement.setString(1, "%" + (isOnline ? 1 : 0) + "%");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User(resultSet.getString("username"), resultSet.getString("password"));
@@ -966,13 +964,90 @@ public class DatabaseHelper implements DatabaseHandler {
         return success;
     }
 
-    public void updateSong(Song song){
-        String query = "UPDATE Songs set playDate = ? WHERE hash = ?";
+    /**
+     * Update an existing user in the database
+     *
+     * @param user the user object
+     */
+    public boolean updateUser(User user) {
+        boolean success = true;
+        String query = "UPDATE Users " +
+                "SET username = ?, " +
+                "likedSongs = ?, " +
+                "recentlyPlayed = ?, " +
+                "password = ?, " +
+                "profileImage = ?, " +
+                "albums = ?, " +
+                "playlists = ?, " +
+                "friends = ?, " +
+                "online = ?, " +
+                "lastOnline = ? " +
+                "WHERE username = ?";
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(query);
-            statement.setLong( 1, new Date().getTime());
-            statement.setString(2, song.getHash());
+            statement.setString(1, user.getUsername());
+            StringBuilder builder = new StringBuilder();
+            for (Song song : user.getLikedSongs()) {
+                if (!song.getHash().isEmpty()) {
+                    builder.append(song.getHash()).append(Song.HASH_SEPERATOR);
+                }
+            }
+            statement.setString(2, builder.toString());
+            builder = new StringBuilder();
+            for (Song song : user.getSongs()) {
+                if (!song.getHash().isEmpty()) {
+                    builder.append(song.getHash()).append(Song.HASH_SEPERATOR);
+                }
+            }
+            statement.setString(3, builder.toString());
+
+            statement.setString(4, user.getPassword());
+
+            statement.setString(5, user.getProfileImage().toString());
+            builder = new StringBuilder();
+            for (Album album : user.getAlbums()) {
+                builder.append(album.getId()).append(Song.HASH_SEPERATOR);
+            }
+            statement.setString(6, builder.toString());
+            builder = new StringBuilder();
+            for (Playlist playlist : user.getPlaylists()) {
+                builder.append(playlist.getId()).append(Song.HASH_SEPERATOR);
+            }
+            statement.setString(7, builder.toString());
+            builder = new StringBuilder();
+            if (user.getFriendsList() != null) {
+                for (User friends : user.getFriendsList()) {
+                    builder.append(friends.getUsername()).append(Song.HASH_SEPERATOR);
+                }
+            }
+            statement.setString(8, builder.toString());
+
+            statement.setInt(9, user.isOnline()?1:0);
+            statement.setLong(10, new Date().getTime());
+            statement.execute();
+        } catch (SQLException e) {
+            success = false;
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                success = false;
+            }
+        }
+        return success;
+    }
+
+    public void updateSong(Song song){
+        String query = "UPDATE Songs SET playCount = ?, playDate = ? WHERE hash = ?";
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt( 1, song.getPlayCount());
+            statement.setLong( 2, new Date().getTime());
+            statement.setString(3, song.getHash());
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();

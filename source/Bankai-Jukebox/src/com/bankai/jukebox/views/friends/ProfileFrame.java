@@ -1,0 +1,194 @@
+package com.bankai.jukebox.views.friends;
+
+import com.bankai.jukebox.Main;
+import com.bankai.jukebox.models.Playlist;
+import com.bankai.jukebox.models.User;
+import com.bankai.jukebox.utils.IO.BJFileChooser;
+import com.bankai.jukebox.utils.network.Client;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+
+public class ProfileFrame extends JFrame {
+    private JLabel profPicLabel = new JLabel();
+    //    private JLabel nameLabel = new JLabel();
+    //    private JLabel
+    private JPanel picPanel = new JPanel();
+    private JPanel infAndFriendsPanel = new JPanel();
+    private JPanel infPanel = new JPanel();
+    private JLabel userName = new JLabel();
+    //    private JPanel
+    private JButton picEditeButton = new JButton("Change pic");
+    private BJFileChooser myFileChooser;
+
+    public ProfileFrame(){
+        infPanel.setLayout(new BoxLayout(infPanel,BoxLayout.Y_AXIS));
+        picPanel.setLayout(new BoxLayout(picPanel,BoxLayout.Y_AXIS));
+        this.setLayout(new BorderLayout());
+        profPicLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//Setting Background
+        picPanel.setBackground(new Color(22,22,22));
+        picPanel.validate();
+        picPanel.repaint();
+
+        infPanel.setBackground(new Color(22,22,22));
+        infPanel.validate();
+        infPanel.repaint();
+
+        URL url;
+        Image image;
+        ImageIcon imageIcon = null;
+        try {
+            File homeFile = new File(Main.user.getProfileImage());
+            url = homeFile.toURI().toURL();
+            imageIcon = new ImageIcon(url);
+            image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            imageIcon = new ImageIcon(image);
+        } catch (MalformedURLException e1) {
+            e1.printStackTrace();
+        }
+        profPicLabel.setIcon(imageIcon);
+        picPanel.add(profPicLabel);
+        picPanel.add(Box.createRigidArea(new Dimension(0,5)));
+
+        picEditeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        picEditeButton.addActionListener(e -> {
+            URL url1 = null;
+            Image image1;
+            ImageIcon imageIcon1 = null;
+
+            myFileChooser = new BJFileChooser(ProfileFrame.this, null, true);
+//                uri =  myFileChooser.getImageFile();
+//                TagReader reader = new TagReader();
+            try {
+                url1 = myFileChooser.getImageFile().toURL();
+                imageIcon1 = new ImageIcon(url1);
+                image1 = imageIcon1.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageIcon1 = new ImageIcon(image1);
+            } catch (MalformedURLException e1) {
+                e1.printStackTrace();
+            }
+            profPicLabel.setIcon(imageIcon1);
+            User curr = Main.user;
+            Main.databaseHandler.removeUser(curr.getUsername());
+            try {
+                curr.setProfileImage(url1.toURI());
+            } catch (URISyntaxException e1) {
+                e1.printStackTrace();
+            }
+            Main.databaseHandler.addUser(curr);
+        });
+        picPanel.add(picEditeButton);
+        picPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        userName.setText(Main.user.getUsername());
+        userName.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        userName.setFont(FontManager.getUbuntu(30f));
+        picPanel.add(userName);
+        picPanel.add(Box.createRigidArea(new Dimension(0,5)));
+
+        infAndFriendsPanel.add(infPanel,BorderLayout.NORTH);
+
+        this.add(picPanel,BorderLayout.WEST);
+        this.setBackground(new Color(22,22,22));
+        this.validate();
+        this.repaint();
+        this.add(infAndFriendsPanel,BorderLayout.CENTER);
+        this.setResizable(false);
+        this.pack();
+        this.setVisible(true);
+    }
+
+
+    /**
+     * constructor to load a friend profile panel
+     * @param friend
+     */
+    public ProfileFrame(User friend){
+        picPanel.setLayout(new BoxLayout(picPanel,BoxLayout.Y_AXIS));
+        this.setLayout(new BorderLayout());
+        profPicLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//Setting Background
+        picPanel.setBackground(new Color(22,22,22));
+        picPanel.validate();
+        picPanel.repaint();
+
+        URL url;
+        Image image;
+        ImageIcon imageIcon = null;
+        try {
+            File homeFile = new File(friend.getProfileImage());
+            url = homeFile.toURI().toURL();
+            imageIcon = new ImageIcon(url);
+            image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            imageIcon = new ImageIcon(image);
+        } catch (MalformedURLException e1) {
+            e1.printStackTrace();
+        }
+        profPicLabel.setIcon(imageIcon);
+        picPanel.add(profPicLabel);
+        picPanel.add(Box.createRigidArea(new Dimension(0,5)));
+
+        // download song button
+//        if (!friend.getSongs().isEmpty() && friend.isOnline() && !MainFrame.getAllSongs().contains(friend.getCurrentSong())){
+//            JButton loadButton = new JButton("Load " + friend.getCurrentSong().getTitle() + " from Friend");
+//            loadButton.setBackground(new Color(22,22,22));
+//            loadButton.setForeground(Color.WHITE);
+////            loadButton.setFont(FontManager.getUbuntu(16f));
+//            loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+//            User finalFriend = friend;
+//            loadButton.addActionListener(actionEvent -> MainFrame.userClient.receiveFileRequest(finalFriend));
+//            picPanel.add(loadButton);
+//        }
+
+        // init load playlist panel
+        JButton friendPlaylist = new JButton("Show playlist");
+        friendPlaylist.setBackground(new Color(22,22,22));
+        friendPlaylist.setForeground(Color.WHITE);
+//        friendPlaylist.setFont(FontManager.getUbuntu(16f));
+        friendPlaylist.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // check if there exists a public playlist
+        ArrayList<Playlist> publicPlaylists = new ArrayList<>();
+        for (Playlist playlist : friend.getPlaylists()){
+            if (playlist.isPublic()) {
+                publicPlaylists.add(playlist);
+            }
+        }
+        friendPlaylist.addActionListener(actionEvent -> {
+            for (Playlist p : publicPlaylists){
+                for (User f : Main.user.getFriendsList()) {
+                    if (f.isOnline()) {
+                        System.out.println("sharing playlist with " + f.getUsername());
+//                        userClient.sendRequest(Client.sharePlaylistRequest(p, f));
+                    }
+                }
+            }
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        });
+        if (!publicPlaylists.isEmpty()){
+            picPanel.add(friendPlaylist);
+        }
+
+        userName.setText(friend.getUsername());
+        userName.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        userName.setFont(FontManager.getUbuntu(30f));
+        picPanel.add(userName);
+        picPanel.add(Box.createRigidArea(new Dimension(0,5)));
+
+        infAndFriendsPanel.add(picPanel,BorderLayout.NORTH);
+
+        this.add(infAndFriendsPanel,BorderLayout.CENTER);
+        this.setBackground(new Color(22,22,22));
+        this.validate();
+        this.repaint();
+        this.setResizable(false);
+        this.pack();
+        this.setVisible(true);
+    }
+}

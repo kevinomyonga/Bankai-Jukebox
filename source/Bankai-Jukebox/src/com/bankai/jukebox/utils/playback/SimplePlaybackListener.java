@@ -2,6 +2,7 @@ package com.bankai.jukebox.utils.playback;
 
 import com.bankai.jukebox.Main;
 import com.bankai.jukebox.models.Request;
+import com.bankai.jukebox.models.Song;
 import com.bankai.jukebox.pages.HomePage;
 import com.bankai.jukebox.views.player.PlayerControlsPanel;
 import com.bankai.jukebox.views.player.PlayerPanel;
@@ -74,7 +75,12 @@ public class SimplePlaybackListener extends MediaPlayerEventAdapter {
         playerPanel.getSongInfoPanel().updateInformation();
         playerPanel.getProgressBarPanel().startProgress();
         Main.user.listened(playerPanel.getPlayBackController().getCurrentSong(), HomePage.databaseHandler);
-        Main.databaseHandler.updateSong(playerPanel.getPlayBackController().getCurrentSong());
+
+        // Update play count
+        Song currentSong = playerPanel.getPlayBackController().getCurrentSong();
+        currentSong.setPlayCount(currentSong.getPlayCount() + 1);
+
+        Main.databaseHandler.updateSong(currentSong);
 //        new Thread(()-> initLyrics(playerPanel.getPlayBackController().getCurrentSong().getTitle(), playerPanel.getPlayBackController().getCurrentSong().getArtist())).start();
         Main.user.setCurrentSong(playerPanel.getPlayBackController().getCurrentSong());
         System.out.println(Main.user.getCurrentSong().getTitle());

@@ -32,6 +32,7 @@ public class SignInPanel extends JPanel {
     public SignInPanel(DatabaseHandler databaseHandler, LoginPage loginPage){
         this.databaseHandler = databaseHandler;
 
+        this.setOpaque(false);
 //        this.setBackground(new Color(22,22,22));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         this.setAlignmentX(CENTER_ALIGNMENT);

@@ -223,31 +223,34 @@ class SongsPanelContent extends JPanel implements SearchPanel.SearchListener {
         BJFileChooser fileChooser = new BJFileChooser(SongsPanelContent.this, null, true);
 
         File selectedFile = fileChooser.getMP3File();
-        File destFile = new File(Constants.APP_MUSIC_DIRECTORY + File.separator + selectedFile.getName());
 
-        try {
-            Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        if (selectedFile != null) {
+            File destFile = new File(Constants.APP_MUSIC_DIRECTORY + File.separator + selectedFile.getName());
 
-            if (isAudioFile(destFile.getName())) {
+            try {
+                Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                if (isAudioFile(destFile.getName())) {
 //                audioFiles.add(destFile);
 //                filterSongs("");
 
-                TagReader songReader = new TagReader();
-                URI mp3 = destFile.toURI();
-                Song song = null;
-                try {
-                    songReader.getAdvancedTags(mp3.toURL());
-                    song = songReader.getSong();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+                    TagReader songReader = new TagReader();
+                    URI mp3 = destFile.toURI();
+                    Song song = null;
+                    try {
+                        songReader.getAdvancedTags(mp3.toURL());
+                        song = songReader.getSong();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
 
-                // add song to the parent playlist
+                    // add song to the parent playlist
 //                HomePage.databaseHandler.addSongToPlaylist(song, null);
-                addSong(song);
+                    addSong(song);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -267,7 +270,7 @@ class SongsPanelContent extends JPanel implements SearchPanel.SearchListener {
     }
 
     /**
-     * method deletes song from all occurrences in tables. use this method inside another thread cause it may block the app for a couple of seconds
+     * Method deletes song from all occurrences in tables. use this method inside another thread cause it may block the app for a couple of seconds
      *
      * @param song
      */

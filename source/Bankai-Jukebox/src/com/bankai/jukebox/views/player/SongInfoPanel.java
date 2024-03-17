@@ -20,7 +20,7 @@ public class SongInfoPanel extends JPanel {
     private JLabel songArtistLabel;
     private JPanel data;
     private Color background;
-//    private Color foreground;
+
     private Font font1;
     private Font font2;
 
@@ -60,18 +60,15 @@ public class SongInfoPanel extends JPanel {
         data.setLayout(new BorderLayout());
         data.setBackground(background);
 
-        songArtistLabel = new JLabel("Artist");
-//        artist.setForeground(foreground);
+        songArtistLabel = new JLabel("");
         songArtistLabel.setFont(font2);
         data.add(songArtistLabel, BorderLayout.NORTH);
 
-        songNameLabel = new JLabel("Title");
-//        title.setForeground(foreground);
+        songNameLabel = new JLabel("");
         songNameLabel.setFont(font1);
         data.add(songNameLabel, BorderLayout.CENTER);
 
-        songAlbumLabel = new JLabel("Album");
-//        album.setForeground(foreground);
+        songAlbumLabel = new JLabel("");
         songAlbumLabel.setFont(font2);
         data.add(songAlbumLabel, BorderLayout.SOUTH);
 
@@ -93,7 +90,7 @@ public class SongInfoPanel extends JPanel {
             e.printStackTrace();
         }
 
-        songArtWorkImage = songArtWorkIcon.getImage().getScaledInstance(60,60,Image.SCALE_SMOOTH);
+        songArtWorkImage = Objects.requireNonNull(songArtWorkIcon).getImage().getScaledInstance(60,60,Image.SCALE_SMOOTH);
         ImageIcon homeIconn = new ImageIcon(songArtWorkImage);
         songImageLabel.setIcon(homeIconn);
         if (Main.user.getLikedSongs().contains(playBackController.getCurrentSong())){
@@ -108,6 +105,7 @@ public class SongInfoPanel extends JPanel {
             this.validate();
             this.repaint();
         }
+
         //Updating name
         songNameLabel.setText(playBackController.getCurrentSong().getTitle());
         //Updating Artist
@@ -115,7 +113,6 @@ public class SongInfoPanel extends JPanel {
         //Updating Album
         songAlbumLabel.setText(playBackController.getCurrentSong().getAlbum());
 
-//        playLabel.setIcon(pausIcon);
         isPlaying = true;
     }
 }

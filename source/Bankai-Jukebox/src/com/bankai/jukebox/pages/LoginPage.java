@@ -4,6 +4,8 @@ import com.bankai.jukebox.config.Constants;
 import com.bankai.jukebox.utils.database.DatabaseHandler;
 import com.bankai.jukebox.views.forms.SignInPanel;
 import com.bankai.jukebox.views.forms.SignUpPanel;
+import com.bankai.jukebox.views.login.LoginOverlayPanel;
+import com.bankai.jukebox.views.login.LoginVideoPanel;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent;
@@ -21,7 +23,9 @@ public class LoginPage extends JFrame {
 
     private JPanel container;
 
-    private CallbackMediaPlayerComponent mediaPlayerComponent;
+//    private CallbackMediaPlayerComponent mediaPlayerComponent;
+    private LoginVideoPanel loginVideoPanel;
+    private LoginOverlayPanel loginOverlayPanel;
 
     public LoginPage(DatabaseHandler databaseHandler) {
         super(Constants.APP_NAME); // Set the title of the JFrame
@@ -31,14 +35,12 @@ public class LoginPage extends JFrame {
         initializeWindow(); // Initialize window properties
         addComponents(); // Add components to the JFrame
         setWindowProperties(); // Set JFrame properties
-
-        play();
     }
 
     // Method to initialize window properties
     private void initializeWindow() {
 
-        this.setLayout(new BorderLayout()); // Set layout manager for the JFrame
+        this.setLayout(new OverlayLayout(getContentPane())); // Set layout manager for the JFrame
 
         // Set preferred size for the JFrame
         Dimension appWindowDimension = new Dimension(
@@ -48,42 +50,32 @@ public class LoginPage extends JFrame {
         this.setPreferredSize(appWindowDimension);
         this.setMinimumSize(appWindowDimension);
         this.setMaximumSize(appWindowDimension);
-
-        mediaPlayerComponent = new CallbackMediaPlayerComponent();
-
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                stop();
-            }
-        });
     }
 
     // Method to add components to the JFrame
     private void addComponents() {
-        container = new JPanel();
-        container.setLayout(new BorderLayout());
-        container.add(mediaPlayerComponent);
 
-        this.setContentPane(container);
+        // Create a panel for the video background
+        loginVideoPanel = new LoginVideoPanel();
+        add(loginVideoPanel);
 
-//        Canvas canvas = new Canvas();
-//        mediaPlayerComponent.mediaPlayer().videoSurface().set(
-//                mediaPlayerComponent.mediaPlayerFactory().videoSurfaces().newVideoSurface(canvas));
-        mediaPlayerComponent.mediaPlayer().events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+        // Create a panel for the login form
+        loginOverlayPanel = new LoginOverlayPanel(databaseHandler, this);
+        setGlassPane(loginOverlayPanel);
+        loginOverlayPanel.setVisible(true);
+//        add(loginOverlayPanel);
+
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-                if (newTime >= mediaPlayer.status().length() - 1000) {
-                    mediaPlayer.controls().setPosition(0);
-                }
+            public void windowOpened(WindowEvent e) {
+                loginVideoPanel.play();
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                loginVideoPanel.stop();
             }
         });
-
-        SignInPanel signInPanel = new SignInPanel(databaseHandler, this);
-        this.add(signInPanel, BorderLayout.WEST);
-
-        SignUpPanel signUpPanel = new SignUpPanel(databaseHandler, this);
-        this.add(signUpPanel, BorderLayout.EAST);
     }
 
     // Method to set JFrame properties
@@ -93,36 +85,6 @@ public class LoginPage extends JFrame {
         this.setResizable(false); // Disable resizing of the JFrame
         this.pack(); // Pack components within the JFrame
         this.setVisible(true); // Make the JFrame visible
-    }
-
-    public void play() {
-        if (mediaPlayerComponent.mediaPlayer().status().isPlaying()) {
-            mediaPlayerComponent.mediaPlayer().controls().stop();
-        }
-//        mediaPlayerComponent.mediaPlayer().media().play(
-//                new File(Objects.requireNonNull(LoginPage.class.getClassLoader()
-//                        .getResource("videos/video-background.mp4")).getFile()).getAbsolutePath());
-
-        URL resourceUrl = LoginPage.class.getClassLoader().getResource("videos/video-background.mp4");
-        if (resourceUrl != null) {
-            File file = new File(resourceUrl.getFile());
-            String absolutePath = file.getAbsolutePath();
-            System.out.println("Absolute path: " + absolutePath);
-
-            // Load Video
-            mediaPlayerComponent.mediaPlayer().media().startPaused(file.getAbsolutePath());
-            // Play
-            mediaPlayerComponent.mediaPlayer().controls().play();
-
-        } else {
-            System.out.println("Resource not found.");
-        }
-    }
-
-    public void stop() {
-        mediaPlayerComponent.mediaPlayer().controls().stop();
-        mediaPlayerComponent.mediaPlayer().release();
-        mediaPlayerComponent.mediaPlayerFactory().release();
     }
 
     public void closeFrame(){

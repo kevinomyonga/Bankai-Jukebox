@@ -2,6 +2,7 @@ package com.bankai.jukebox.views.player;
 
 import com.bankai.jukebox.config.Icons;
 import com.bankai.jukebox.controllers.AudioController;
+import com.bankai.jukebox.pages.HomePage;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import javax.swing.*;
@@ -50,5 +51,6 @@ public class VolumeSliderPanel extends JPanel {
     }
 
     private void showLyrics() {
+//        HomePage.toggleMenu();
     }
 }

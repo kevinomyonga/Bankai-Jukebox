@@ -2,7 +2,6 @@ package com.bankai.jukebox.views.player;
 
 import com.bankai.jukebox.controllers.PlayBackController;
 import com.bankai.jukebox.models.Song;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,12 +10,10 @@ import java.awt.event.MouseEvent;
 
 public class ProgressBarPanel extends JPanel {
 
-    private PlayBackController playBackController;
-    private JTextField passedTime;
-//    private Color background;
-    private JProgressBar progressBar;
-    private JTextField totalTime;
-//    private int num = 0;
+    private final PlayBackController playBackController;
+    private final JTextField passedTime;
+    private final JProgressBar progressBar;
+    private final JTextField totalTime;
     private boolean isPlaying;
 
     private long duration;
@@ -30,11 +27,11 @@ public class ProgressBarPanel extends JPanel {
 
         this.isPlaying = false;
 //        background = new Color(40, 40, 40);
-        this.setForeground(new Color(179, 179, 179));
+//        this.setForeground(new Color(179, 179, 179));
 //        this.setBackground(background);
 
         passedTime = new JTextField("00:00");
-        passedTime.setFont(new Font("Arial", Font.BOLD, 9));
+        passedTime.setFont(new Font("Arial", Font.BOLD, 11));
         passedTime.setEditable(false);
         passedTime.setFocusable(false);
         passedTime.setHorizontalAlignment(JTextField.CENTER);
@@ -50,7 +47,7 @@ public class ProgressBarPanel extends JPanel {
 
 
         totalTime = new JTextField("00:00");
-        totalTime.setFont(new Font("Arial", Font.BOLD, 9));
+        totalTime.setFont(new Font("Arial", Font.BOLD, 11));
         totalTime.setEditable(false);
         totalTime.setFocusable(false);
         totalTime.setHorizontalAlignment(JTextField.CENTER);
@@ -59,49 +56,9 @@ public class ProgressBarPanel extends JPanel {
         this.add(totalTime);
     }
 
-
-//    public JProgressBar getProgressBar() {
-//        return progressBar;
-//    }
-
-//    public void refresh(int songDuration) {
-//        this.progressBar.setMaximum(songDuration);
-//        this.progressBar.setValue(0);
-//        this.total.setText(songDuration / 60 + ":" + songDuration % 60);
-//        this.passed.setText("00:00");
-//        this.num = 0;
-//        this.isPlaying = false;
-//    }
-//
-//    public void iterate() {
-//
-//        while (num < progressBar.getMaximum() && isPlaying) {
-//            progressBar.setValue(num);
-//            passed.setText(progressBar.getValue() / 60 + ":" + progressBar.getValue() % 60);
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//            }
-//            num++;
-//        }
-//    }
-//
-//    public void stop() {
-//        isPlaying = false;
-//    }
-
-
-//    @Override
-//    public void run() {
-//        isPlaying = true;
-//        iterate();
-//    }
-
-
     public void startProgress(){
         progressThread = new Thread(() -> {
             if (!isPlaying){
-//                playState = 0;
                 isPlaying = true;
             }
 
@@ -126,7 +83,7 @@ public class ProgressBarPanel extends JPanel {
                     String passed = min+":"+secString;
                     passedTime.setText(passed);
                     c=0;
-                }else{
+                } else {
                     c++;
                 }
 
@@ -163,11 +120,11 @@ public class ProgressBarPanel extends JPanel {
         duration = currentSong.getLength();
         progressBar.setMaximum((int) duration);
 
-        String secS = ((int) ((duration/1000)%60)) + "";
+        String seconds = ((int) ((duration/1000)%60)) + "";
         if (((int) ((duration/1000)%60)) < 10){
-            secS = 0 + "" + ((int) ((duration/1000)%60));
+            seconds = 0 + "" + ((int) ((duration/1000)%60));
         }
-        String len = ((int) ((duration/1000)/60)) + ":" + secS ;
+        String len = ((int) ((duration/1000)/60)) + ":" + seconds ;
         totalTime.setText(len);
 
         setupMusicSlider();

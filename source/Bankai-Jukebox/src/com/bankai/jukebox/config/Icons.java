@@ -30,7 +30,7 @@ public class Icons {
 
     private ImageIcon likeIcon;
 
-    private ImageIcon unLikeIcon;
+    private ImageIcon dislikeIcon;
 
 
     public Icons() {
@@ -90,23 +90,23 @@ public class Icons {
         volumeIcon = new ImageIcon(newVolumeIconImage);
 
         lyricsIcon = new ImageIcon(Objects.requireNonNull(
-                Icons.class.getClassLoader().getResource("icons/volume.png")));
+                Icons.class.getClassLoader().getResource("icons/audiobook.png")));
         Image lyricsIconImage = lyricsIcon.getImage(); // transform it
         Image newLyricsIconImage = lyricsIconImage.getScaledInstance(24, 24, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         lyricsIcon = new ImageIcon(newLyricsIconImage);
-//
-//        likeIcon = new ImageIcon(Objects.requireNonNull(
-//                VideosPanel.class.getClassLoader().getResource("icons/likeIcon.png")));
-//        Image image6 = likeIcon.getImage(); // transform it
-//        Image newimg6 = image6.getScaledInstance(24, 24, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-//        likeIcon = new ImageIcon(newimg6);
-//
-//        unLikeIcon = new ImageIcon(Objects.requireNonNull(
-//                VideosPanel.class.getClassLoader().getResource("icons/unlikeIcon.png")));
-//        Image image7 = unLikeIcon.getImage(); // transform it
-//        Image newimg7 = image7.getScaledInstance(24, 24, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-//        unLikeIcon = new ImageIcon(newimg7);
-//
+
+        likeIcon = new ImageIcon(Objects.requireNonNull(
+                Icons.class.getClassLoader().getResource("icons/like.png")));
+        Image image6 = likeIcon.getImage(); // transform it
+        Image newimg6 = image6.getScaledInstance(24, 24, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        likeIcon = new ImageIcon(newimg6);
+
+        dislikeIcon = new ImageIcon(Objects.requireNonNull(
+                Icons.class.getClassLoader().getResource("icons/dislike.png")));
+        Image image7 = dislikeIcon.getImage(); // transform it
+        Image newimg7 = image7.getScaledInstance(24, 24, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        dislikeIcon = new ImageIcon(newimg7);
+
 //        shareIcon = new ImageIcon(Objects.requireNonNull(
 //                VideosPanel.class.getClassLoader().getResource("icons/shareIcon.png")));
 //        Image image8 = shareIcon.getImage(); // transform it
@@ -163,8 +163,8 @@ public class Icons {
     public ImageIcon getLyricsIcon() {
         return lyricsIcon;
     }
-//
-//    public ImageIcon getUnLikeIcon() {
-//        return unLikeIcon;
-//    }
+
+    public ImageIcon getDislikeIcon() {
+        return dislikeIcon;
+    }
 }
