@@ -139,7 +139,11 @@ public class PlayBackController {
     }
 
     public Song getCurrentSong() {
-        return songQueue.get(queueIndex);
+        if (!songQueue.isEmpty()) {
+            return songQueue.get(queueIndex);
+        } else {
+            return null;
+        }
     }
 
     public ArrayList<Song> getSongQueue() {

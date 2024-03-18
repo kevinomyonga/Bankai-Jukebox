@@ -72,19 +72,21 @@ public class SimplePlaybackListener extends MediaPlayerEventAdapter {
     @Override
     public void playing(MediaPlayer mediaPlayer) {
         System.out.println("started");
-        playerPanel.getSongInfoPanel().updateInformation();
         playerPanel.getProgressBarPanel().startProgress();
-        Main.user.listened(playerPanel.getPlayBackController().getCurrentSong(), HomePage.databaseHandler);
+        if(playerPanel.getPlayBackController().getCurrentSong() != null) {
+            playerPanel.getSongInfoPanel().updateInformation();
+            Main.user.listened(playerPanel.getPlayBackController().getCurrentSong(), HomePage.databaseHandler);
 
-        // Update play count
-        Song currentSong = playerPanel.getPlayBackController().getCurrentSong();
-        currentSong.setPlayCount(currentSong.getPlayCount() + 1);
+            // Update play count
+            Song currentSong = playerPanel.getPlayBackController().getCurrentSong();
+            currentSong.setPlayCount(currentSong.getPlayCount() + 1);
 
-        Main.databaseHandler.updateSong(currentSong);
+            Main.databaseHandler.updateSong(currentSong);
 //        new Thread(()-> initLyrics(playerPanel.getPlayBackController().getCurrentSong().getTitle(), playerPanel.getPlayBackController().getCurrentSong().getArtist())).start();
-        Main.user.setCurrentSong(playerPanel.getPlayBackController().getCurrentSong());
-        System.out.println(Main.user.getCurrentSong().getTitle());
+            Main.user.setCurrentSong(playerPanel.getPlayBackController().getCurrentSong());
+            System.out.println(Main.user.getCurrentSong().getTitle());
 //        MainFrame.userClient.sendRequest(new Request(0, Main.user));
+        }
     }
 
     @Override
