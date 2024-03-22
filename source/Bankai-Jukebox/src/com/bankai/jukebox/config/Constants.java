@@ -95,4 +95,9 @@ public class Constants {
      * A constant field to denote the value of APP_DB_NAME.
      */
     public static final String APP_DB_NAME = APP_NAME.replace(" ", "");
+
+    /**
+     * A constant field to denote the value of LYRICS_API_KEY.
+     */
+    public static final String LYRICS_API_KEY = "5c816ea1678c68472364e0d23f9e4302";
 }

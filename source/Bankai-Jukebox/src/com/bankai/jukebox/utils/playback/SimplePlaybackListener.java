@@ -1,9 +1,15 @@
 package com.bankai.jukebox.utils.playback;
 
 import com.bankai.jukebox.Main;
+import com.bankai.jukebox.config.Constants;
 import com.bankai.jukebox.models.Request;
 import com.bankai.jukebox.models.Song;
 import com.bankai.jukebox.pages.HomePage;
+import com.bankai.jukebox.utils.jmusixmatch.MusixMatch;
+import com.bankai.jukebox.utils.jmusixmatch.MusixMatchException;
+import com.bankai.jukebox.utils.jmusixmatch.entity.lyrics.Lyrics;
+import com.bankai.jukebox.utils.jmusixmatch.entity.track.Track;
+import com.bankai.jukebox.utils.jmusixmatch.entity.track.TrackData;
 import com.bankai.jukebox.views.player.PlayerControlsPanel;
 import com.bankai.jukebox.views.player.PlayerPanel;
 import uk.co.caprica.vlcj.media.MediaRef;
@@ -16,45 +22,45 @@ import java.awt.*;
 
 public class SimplePlaybackListener extends MediaPlayerEventAdapter {
 
-//    private boolean initLyrics(String songTitle, String artist){
-//        boolean result = true;
-//        org.jmusixmatch.MusixMatch instance = new MusixMatch(PlaybackControlPanel.API_KEY);
-//        Track track = null;
-//        try {
-//            track = instance.getMatchingTrack(songTitle, artist);
-//        } catch (MusixMatchException ex) {
-//            result = false;
-//        }
-//        if (track != null) {
-//            TrackData data = track.getTrack();
-//
-//            int trackID = data.getTrackId();
-//
-//            Lyrics lyrics = null;
-//            try {
-//                lyrics = instance.getLyrics(trackID);
-//            } catch (MusixMatchException ex) {
-//                result = false;
-//            }
-//            if (lyrics != null) {
-//                JFrame lyricsFrame = new JFrame(songTitle + " - " + artist);
-//                JPanel panel = new JPanel(new BorderLayout());
-//                panel.setBackground(new Color(22, 22, 22));
-//                JLabel label = new JLabel();
-//                label.setText("<html>" + lyrics.getLyricsBody().replaceAll("\n", "<br/>") + "</html>");
-//                System.out.println();
-//                label.setBackground(new Color(22, 22, 22));
+    private boolean initLyrics(String songTitle, String artist){
+        boolean result = true;
+        MusixMatch instance = new MusixMatch(Constants.LYRICS_API_KEY);
+        Track track = null;
+        try {
+            track = instance.getMatchingTrack(songTitle, artist);
+        } catch (MusixMatchException ex) {
+            result = false;
+        }
+        if (track != null) {
+            TrackData data = track.getTrack();
+
+            int trackID = data.getTrackId();
+
+            Lyrics lyrics = null;
+            try {
+                lyrics = instance.getLyrics(trackID);
+            } catch (MusixMatchException ex) {
+                result = false;
+            }
+            if (lyrics != null) {
+                JFrame lyricsFrame = new JFrame(songTitle + " - " + artist);
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.setBackground(new Color(22, 22, 22));
+                JLabel label = new JLabel();
+                label.setText("<html>" + lyrics.getLyricsBody().replaceAll("\n", "<br/>") + "</html>");
+                System.out.println();
+                label.setBackground(new Color(22, 22, 22));
 //                label.setFont(FontManager.getUbuntu(16f));
-//                label.setForeground(Color.WHITE);
-//                label.setBorder(new EmptyBorder(20, 20, 20, 20));
-//                panel.add(label);
-//                lyricsFrame.add(panel);
-//                lyricsFrame.pack();
-//                lyricsFrame.setVisible(true);
-//            }
-//        }
-//        return result;
-//    }
+                label.setForeground(Color.WHITE);
+                label.setBorder(new EmptyBorder(20, 20, 20, 20));
+                panel.add(label);
+                lyricsFrame.add(panel);
+                lyricsFrame.pack();
+                lyricsFrame.setVisible(true);
+            }
+        }
+        return result;
+    }
 
     private PlayerPanel playerPanel;
 
@@ -85,7 +91,7 @@ public class SimplePlaybackListener extends MediaPlayerEventAdapter {
             currentSong.setPlayCount(currentSong.getPlayCount() + 1);
 
             Main.databaseHandler.updateSong(currentSong);
-//        new Thread(()-> initLyrics(playerPanel.getPlayBackController().getCurrentSong().getTitle(), playerPanel.getPlayBackController().getCurrentSong().getArtist())).start();
+            new Thread(()-> initLyrics(playerPanel.getPlayBackController().getCurrentSong().getTitle(), playerPanel.getPlayBackController().getCurrentSong().getArtist())).start();
             Main.user.setCurrentSong(playerPanel.getPlayBackController().getCurrentSong());
             System.out.println(Main.user.getCurrentSong().getTitle());
 //        MainFrame.userClient.sendRequest(new Request(0, Main.user));
