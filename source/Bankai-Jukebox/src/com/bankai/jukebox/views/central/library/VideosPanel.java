@@ -69,7 +69,9 @@ class VideosPanelContent extends JPanel {
 
                     ArrayList<File> videoQueue = new ArrayList<>();
                     videoQueue.add(file);
-                    new VideoPlayer(playerPanel.getMediaPlayerComponent(), videoQueue);
+//                    new VideoPlayer(playerPanel.getMediaPlayerComponent(), videoQueue);
+                    playerPanel.getPlayBackController().play(file.getAbsolutePath());
+                    playerPanel.getMiniPlayer().setWindowVisible(true);
                 });
 
                 // Load image asynchronously

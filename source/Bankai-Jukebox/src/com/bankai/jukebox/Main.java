@@ -43,7 +43,7 @@ public class Main {
 
         // Check if user is already logged in
         ArrayList<User> users;
-        if ((users = databaseHandler.getUserByOnlineStatus(true, databaseHandler)).isEmpty()) {
+        if (!(users = databaseHandler.getUserByOnlineStatus(true, databaseHandler)).isEmpty()) {
             user = users.getFirst();
 
             new HomePage(databaseHandler);

@@ -54,6 +54,9 @@ public class ProgressBarPanel extends JPanel {
 //        total.setBackground(background);
         totalTime.setForeground(new Color(179, 179, 179));
         this.add(totalTime);
+
+        // Call setupMusicSlider() to register mouse listener
+        setupMusicSlider();
     }
 
     public void startProgress(){
@@ -101,8 +104,11 @@ public class ProgressBarPanel extends JPanel {
     }
 
     public void stopProgress(){
+        if (progressThread != null) {
+            progressThread.interrupt(); // Interrupt thread to stop
+        }
 //        progressThread.stop();
-        progressThread = null;
+//        progressThread = null;
 //        playLabel.setIcon(playIcon);
         isPlaying = false;
     }
@@ -114,7 +120,8 @@ public class ProgressBarPanel extends JPanel {
 //        progressBar.setString("0:0/0:0");
         if (progressThread != null) {
 //            progressThread.stop();
-            progressThread = null;
+//            progressThread = null;
+            progressThread.interrupt(); // Interrupt thread if running
         }
         Song currentSong = playBackController.getCurrentSong();
         duration = currentSong.getLength();
@@ -127,7 +134,7 @@ public class ProgressBarPanel extends JPanel {
         String len = ((int) ((duration/1000)/60)) + ":" + seconds ;
         totalTime.setText(len);
 
-        setupMusicSlider();
+        setupMusicSlider(); // Re-setup music slider
     }
 
     public void setupMusicSlider() {
@@ -135,6 +142,8 @@ public class ProgressBarPanel extends JPanel {
         progressBar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
                 pos = e.getX() / (double) progressBar.getWidth();
                 playState = (int) (duration * pos);
                 progressBar.setValue(playState);
@@ -142,17 +151,5 @@ public class ProgressBarPanel extends JPanel {
                 isPlaying = true;
             }
         });
-
-//        progressBar.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                super.mouseClicked(e);
-//                int mouseX = e.getX();
-//                int progressBarVal = (int) Math.round(((double) mouseX / (double) progressBar.getWidth()) * progressBar.getMaximum());
-//                progressBar.setValue(progressBarVal);
-//                num = progressBarVal;
-//                passedTime.setText(progressBar.getValue() / 60 + ":" + progressBar.getValue() % 60);
-//            }
-//        });
     }
 }

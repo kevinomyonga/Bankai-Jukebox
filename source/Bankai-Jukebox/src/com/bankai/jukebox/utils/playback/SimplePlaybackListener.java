@@ -64,8 +64,9 @@ public class SimplePlaybackListener extends MediaPlayerEventAdapter {
 
     @Override
     public void mediaChanged(MediaPlayer mediaPlayer, MediaRef media) {
-        playerPanel.getSongInfoPanel().updateInformation();
         playerPanel.getProgressBarPanel().resetProgress();
+        playerPanel.getMiniPlayer().getMiniPlayerControlsPanel().getProgressBarPanel().resetProgress();
+        playerPanel.getSongInfoPanel().updateInformation();
 //        playerControlsPanel.logData();
     }
 
@@ -73,8 +74,10 @@ public class SimplePlaybackListener extends MediaPlayerEventAdapter {
     public void playing(MediaPlayer mediaPlayer) {
         System.out.println("started");
         playerPanel.getProgressBarPanel().startProgress();
+        playerPanel.getMiniPlayer().getMiniPlayerControlsPanel().getProgressBarPanel().startProgress();
+        playerPanel.getSongInfoPanel().updateInformation();
+
         if(playerPanel.getPlayBackController().getCurrentSong() != null) {
-            playerPanel.getSongInfoPanel().updateInformation();
             Main.user.listened(playerPanel.getPlayBackController().getCurrentSong(), HomePage.databaseHandler);
 
             // Update play count
@@ -93,11 +96,13 @@ public class SimplePlaybackListener extends MediaPlayerEventAdapter {
     public void paused(MediaPlayer mediaPlayer) {
         System.out.println("paused");
         playerPanel.getProgressBarPanel().stopProgress();
+        playerPanel.getMiniPlayer().getMiniPlayerControlsPanel().getProgressBarPanel().stopProgress();
     }
 
     @Override
     public void stopped(MediaPlayer mediaPlayer) {
         playerPanel.getProgressBarPanel().resetProgress();
+        playerPanel.getMiniPlayer().getMiniPlayerControlsPanel().getProgressBarPanel().resetProgress();
         Main.user.setCurrentSong(null);
 //        MainFrame.userClient.sendRequest(new Request(0, Main.user));
     }

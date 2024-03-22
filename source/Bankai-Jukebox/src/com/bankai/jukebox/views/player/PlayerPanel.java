@@ -2,6 +2,7 @@ package com.bankai.jukebox.views.player;
 
 import com.bankai.jukebox.controllers.PlayBackController;
 import com.bankai.jukebox.utils.playback.SimplePlaybackListener;
+import com.bankai.jukebox.views.video.MiniPlayer;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent;
@@ -22,6 +23,8 @@ public class PlayerPanel extends JPanel {
     private VolumeSliderPanel volumeSliderPanel;
     private JPanel centerConsole;
 
+    private MiniPlayer miniPlayer;
+
     private boolean isRadio = false;
 
     public PlayerPanel() {
@@ -30,6 +33,8 @@ public class PlayerPanel extends JPanel {
         this.setPreferredSize(new Dimension(1200, 80));
 
         mediaPlayerComponent = new CallbackMediaPlayerComponent();
+
+        mediaPlayerComponent.mediaPlayer().events().addMediaPlayerEventListener(new SimplePlaybackListener(this));
 
         playBackController = new PlayBackController(mediaPlayerComponent.mediaPlayer(), null);
 
@@ -50,13 +55,17 @@ public class PlayerPanel extends JPanel {
 
         this.add(centerConsole, BorderLayout.CENTER);
 
-        songInfoPanel = new SongInfoPanel(playBackController);
+        songInfoPanel = new SongInfoPanel(this);
         this.add(songInfoPanel, BorderLayout.WEST);
 
         volumeSliderPanel = new VolumeSliderPanel(mediaPlayerComponent.mediaPlayer());
         this.add(volumeSliderPanel, BorderLayout.EAST);
 
-        playBackController.getMediaPlayer().events().addMediaPlayerEventListener(new SimplePlaybackListener(this));
+//        playBackController.getMediaPlayer().events().addMediaPlayerEventListener(new SimplePlaybackListener(this));
+
+        miniPlayer = new MiniPlayer(this);
+//
+//        setVisible(true);
     }
 
     public PlayBackController getPlayBackController() {
@@ -73,6 +82,10 @@ public class PlayerPanel extends JPanel {
         isRadio = true;
         updateCenterConsole();
         return playerRadioControlsPanel;
+    }
+
+    public JPanel getCenterConsole() {
+        return centerConsole;
     }
 
     public void updateCenterConsole() {
@@ -108,5 +121,13 @@ public class PlayerPanel extends JPanel {
 
     public SongInfoPanel getSongInfoPanel() {
         return songInfoPanel;
+    }
+
+    public VolumeSliderPanel getVolumeSliderPanel() {
+        return volumeSliderPanel;
+    }
+
+    public MiniPlayer getMiniPlayer() {
+        return miniPlayer;
     }
 }
