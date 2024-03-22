@@ -7,6 +7,7 @@ import com.bankai.jukebox.pages.LoginPage;
 import com.bankai.jukebox.utils.database.DatabaseConnection;
 import com.bankai.jukebox.utils.database.DatabaseHandler;
 import com.bankai.jukebox.utils.database.DatabaseHelper;
+import com.bankai.jukebox.views.SplashScreen;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -32,8 +33,8 @@ public class Main {
         FlatMacDarkLaf.setup();
         FlatMacLightLaf.setup();
 
-//        SplashScreen splashScreen = new SplashScreen(3000);
-//        splashScreen.showSplash();
+        SplashScreen splashScreen = new SplashScreen(3000);
+        splashScreen.showSplash();
 
         // initializing databaseListeners
         DatabaseConnection connection = new DatabaseConnection(Constants.APP_DB_NAME);
@@ -43,7 +44,7 @@ public class Main {
 
         // Check if user is already logged in
         ArrayList<User> users;
-        if (!(users = databaseHandler.getUserByOnlineStatus(true, databaseHandler)).isEmpty()) {
+        if ((users = databaseHandler.getUserByOnlineStatus(true, databaseHandler)).isEmpty()) {
             user = users.getFirst();
 
             new HomePage(databaseHandler);

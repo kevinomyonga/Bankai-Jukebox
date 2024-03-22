@@ -63,12 +63,12 @@ public class HomePage extends JFrame {
         jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.add(jScrollPane, BorderLayout.WEST);
 
-        // Initialize and add the CentralPanel to the right of the JFrame
-        FriendsActivityPanelsManager friendsActivityPanelsManager = new FriendsActivityPanelsManager();
-        friendsActivityPanelsManager.updateFriendsList();
-        JScrollPane scrollPanel3 = new JScrollPane(friendsActivityPanelsManager, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPanel3.setPreferredSize(new Dimension(280, 700));
-        this.add(scrollPanel3, BorderLayout.EAST);
+        // Initialize and add the FriendsActivityPanelsManager to the right of the JFrame
+//        FriendsActivityPanelsManager friendsActivityPanelsManager = new FriendsActivityPanelsManager();
+//        friendsActivityPanelsManager.updateFriendsList();
+//        JScrollPane scrollPanel3 = new JScrollPane(friendsActivityPanelsManager, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//        scrollPanel3.setPreferredSize(new Dimension(280, 700));
+//        this.add(scrollPanel3, BorderLayout.EAST);
 
 //        rightMenuPanel = new JPanel();
 //        rightMenuPanel.setBackground(Color.LIGHT_GRAY);

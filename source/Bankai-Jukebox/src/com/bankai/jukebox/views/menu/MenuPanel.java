@@ -88,15 +88,6 @@ public class MenuPanel extends JPanel {
         playlistLabel.setBackground(this.getBackground());
         add(playlistLabel);
 
-
-        /*
-          This button creates and adds a new playlist
-         */
-        newPlaylistBtn = new JButton("New Playlist");
-        newPlaylistBtn.setFont(new Font("Arial", Font.BOLD, 12));
-        newPlaylistBtn.setHorizontalAlignment(SwingConstants.LEFT);
-        add(newPlaylistBtn);
-
         /*
           This button shows all existing playlists for user
          */

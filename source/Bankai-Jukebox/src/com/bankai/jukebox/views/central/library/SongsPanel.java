@@ -1,6 +1,8 @@
 package com.bankai.jukebox.views.central.library;
 
+import com.bankai.jukebox.Main;
 import com.bankai.jukebox.config.Constants;
+import com.bankai.jukebox.models.Playlist;
 import com.bankai.jukebox.models.Song;
 import com.bankai.jukebox.models.SongTableRow;
 import com.bankai.jukebox.pages.HomePage;
@@ -8,6 +10,7 @@ import com.bankai.jukebox.utils.AlternateRowColorRenderer;
 import com.bankai.jukebox.utils.IO.BJFileChooser;
 import com.bankai.jukebox.utils.TagReader;
 import com.bankai.jukebox.utils.database.DatabaseHandler;
+import com.bankai.jukebox.views.PopupPlaylist;
 import com.bankai.jukebox.views.SearchPanel;
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;
@@ -57,11 +60,14 @@ class SongsPanelContent extends JPanel implements SearchPanel.SearchListener {
     private ArrayList<SongTableRow> rows = new ArrayList<>();
 //    private DatabaseHandler databaseHandler;
     private SongTableModel tableModel;
+    private PopupPlaylist playlist;
 
     public SongsPanelContent(PlayerPanel playerPanel) {
         super();
 
         this.setLayout(new BorderLayout());
+
+        initPlaylistPopUpMenu();
 
         this.playerPanel = playerPanel;
 
@@ -158,6 +164,40 @@ class SongsPanelContent extends JPanel implements SearchPanel.SearchListener {
 
                         System.out.println("Song selected: " + selectedSong.getTitle());
                     }
+                } else {
+                    int row = ((JTable) e.getSource()).rowAtPoint(new Point(e.getX(), e.getY()));
+                    int col = ((JTable) e.getSource()).columnAtPoint(new Point(e.getX(), e.getY()));
+                    if (col == 0 && SwingUtilities.isLeftMouseButton(e)){
+                        // click on add to playlist open a popup menu
+                        playlist.setPlaylistAlterListener(s -> {
+                            new Thread(() -> {
+                                Main.databaseHandler.addSongToPlaylist(songs.get(row), s);
+                                Main.user.removePlaylist(s.getId());
+                                Main.user.addPlaylist(Main.databaseHandler.getPlaylistByID(s.getId()));
+                            }).start();
+                        });
+                        playlist.show(SongsPanelContent.this, e.getX(), e.getY());
+                    }else if (SwingUtilities.isRightMouseButton(e)){
+                        // right click. swap to elements
+                        ArrayList<SongTableRow> songTableRows = new ArrayList<>();
+                        for (int i = 0; i < rows.size(); i++) {
+                            boolean checked = (boolean) table.getModel().getValueAt(i, 6);
+                            if (checked) {
+                                songTableRows.add(rows.get(i));
+                            }
+                        }
+                        // swap them if size is 2
+                        if (songTableRows.size()==2){
+                            SongTableRow row1 = songTableRows.get(0);
+                            SongTableRow row2 = songTableRows.get(1);
+                            int index1 = rows.indexOf(row1);
+                            int index2 = rows.indexOf(row2);
+                            rows.set(index1, row2);
+                            rows.set(index2, row1);
+                            tableModel.fireTableDataChanged();
+                            System.out.println(index1 + " is now " + index2);
+                        }
+                    }
                 }
             }
         });
@@ -211,6 +251,12 @@ class SongsPanelContent extends JPanel implements SearchPanel.SearchListener {
                     row.getTitle(),
                     row.getAlbum(), row.getArtist(), row.getLastPlayed(), row.getChecked()});
         }
+    }
+
+    // initializes popup menu for add to playlist function
+    private void initPlaylistPopUpMenu(){
+        ArrayList<Playlist> playlists = Main.user.getPlaylists();
+        playlist = new PopupPlaylist(playlists);
     }
 
     // Implementation of SearchPanel.SearchListener
