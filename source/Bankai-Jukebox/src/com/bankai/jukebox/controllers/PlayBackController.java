@@ -60,11 +60,14 @@ public class PlayBackController {
             queueIndex = songQueue.indexOf(songInQueue);
             mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
 
+            /**
+             * Blocks the main thread inorder to stream currently playing audio.
+             * Needs a fix before it can be uncommented and go main stream.
+             */
 //            try {
 //                System.out.println("Begin Streaming APP");
 //                StreamHttp http = new StreamHttp();
-//                http.start(new File(
-//                        songInQueue.getLocation()).getAbsolutePath());
+//                http.start(new File(songInQueue.getLocation()).getAbsolutePath());
 //                System.out.println("End Streaming APP");
 //            } catch (Exception e) {
 //                e.printStackTrace();
