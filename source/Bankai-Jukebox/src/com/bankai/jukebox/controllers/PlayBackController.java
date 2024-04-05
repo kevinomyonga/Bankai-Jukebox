@@ -1,5 +1,9 @@
 package com.bankai.jukebox.controllers;
 
+import com.bankai.jukebox.config.Constants;
+import com.bankai.jukebox.experimental.StreamHttp;
+import com.bankai.jukebox.experimental.StreamRTP;
+import com.bankai.jukebox.models.Song;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import java.io.File;
@@ -12,11 +16,11 @@ public class PlayBackController {
     // The MediaPlayer instance associated with this controller
     private final MediaPlayer mediaPlayer;
 
-    private ArrayList<Object> songQueue = new ArrayList<>(); // an Arraylist of songs that are playable, switch between them by queueIndex;
+    private ArrayList<Song> songQueue = new ArrayList<>(); // an Arraylist of songs that are playable, switch between them by queueIndex;
     private int queueIndex = 0; // controller of which songs to play
 
 
-    public PlayBackController(MediaPlayer mediaPlayer, ArrayList<Object> songsToAdd) {
+    public PlayBackController(MediaPlayer mediaPlayer, ArrayList<Song> songsToAdd) {
         // Initialize the MediaPlayer
         this.mediaPlayer = mediaPlayer;
 
@@ -51,15 +55,26 @@ public class PlayBackController {
      *
      * @param songInQueue the song about to be played
      */
-//    public void play(Song songInQueue) {
-//        if (songQueue.contains(songInQueue)){
-//            queueIndex = songQueue.indexOf(songInQueue);
-//            mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
-//        }else{
-//            songQueue.add(queueIndex, songInQueue);
-//            mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
-//        }
-//    }
+    public void play(Song songInQueue) {
+        if (songQueue.contains(songInQueue)){
+            queueIndex = songQueue.indexOf(songInQueue);
+            mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
+
+//            try {
+//                System.out.println("Begin Streaming APP");
+//                StreamHttp http = new StreamHttp();
+//                http.start(new File(
+//                        songInQueue.getLocation()).getAbsolutePath());
+//                System.out.println("End Streaming APP");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
+        }else{
+            songQueue.add(queueIndex, songInQueue);
+            mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
+        }
+    }
 
     /**
      * shuffles playlist by stopping the player and shuffling song queue and then playing the player
@@ -69,7 +84,7 @@ public class PlayBackController {
             mediaPlayer.controls().stop();
             Collections.shuffle(songQueue);
             queueIndex = 0;
-//            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
+            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
         }
     }
 
@@ -92,7 +107,7 @@ public class PlayBackController {
             } else {
                 queueIndex = 0;
             }
-            mediaPlayer.media().play(new File(String.valueOf(songQueue.get(queueIndex))).getAbsolutePath());
+            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
         }
     }
 
@@ -107,7 +122,7 @@ public class PlayBackController {
                 // Reset queue
                 queueIndex = 0;
             }
-            System.out.println(mediaPlayer.media().play(new File(String.valueOf(songQueue.get(queueIndex))).getAbsolutePath()));
+            mediaPlayer.media().play(new File(songQueue.get(queueIndex).getLocation()).getAbsolutePath());
         }
     }
 
@@ -122,5 +137,67 @@ public class PlayBackController {
 
     public void shouldRepeat(boolean repeat) {
         mediaPlayer.controls().setRepeat(repeat);
+    }
+
+    public void resetQueue(ArrayList<Song> newQueue){
+        songQueue = newQueue;
+        queueIndex = 0;
+    }
+
+    public void setQueueIndex(int index){
+        if (index >= songQueue.size()){
+            queueIndex = 0;
+        }else{
+            queueIndex = index;
+        }
+    }
+
+    public Song getCurrentSong() {
+        if (!songQueue.isEmpty()) {
+            return songQueue.get(queueIndex);
+        } else {
+            return null;
+        }
+    }
+
+    public ArrayList<Song> getSongQueue() {
+        return songQueue;
+    }
+
+    /**
+     * method to get current playback time
+     * @return time passed in milliseconds
+     */
+    public int getSec() {
+//        return player.getCurrentFrame() * 26;
+        return (int) (mediaPlayer.status().position()* mediaPlayer.status().length());
+    }
+
+    /**
+     * jumps to the given milisecond of song
+     *
+     * @param milliseconds - remember that each frame lasts 26 mili seconds. so in order to jump to i'th second we must go to i*60000/26'th frame
+     */
+
+    public void move(int milliseconds) {
+        if (!songQueue.isEmpty()) {
+            if (mediaPlayer.status().isSeekable()){
+                mediaPlayer.controls().setTime(milliseconds);
+            }
+//            if (player == null) {
+//                initPlayer();
+//            } else if (!this.player.isPaused() || player.isComplete() || player.isStopped()) {
+//                stop();
+//                initPlayer();
+//            }
+//            executorService.execute(() -> {
+//                try {
+//                    playbackListener.playbackStarted(null);
+//                    player.play((milliseconds) / 26);
+//                } catch (JavaLayerException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+        }
     }
 }

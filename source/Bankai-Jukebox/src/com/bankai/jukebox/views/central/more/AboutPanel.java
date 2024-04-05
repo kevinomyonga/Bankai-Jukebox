@@ -38,6 +38,7 @@ class AboutPanelContent extends JPanel {
 
         add(new TitleText(Constants.APP_NAME));
         add(new TitleText("v" + Constants.APP_VERSION));
+        add(new TitleText("Codename: " + Constants.APP_VERSION_CODENAME));
 
         JLabel descriptionLabel = new JLabel();
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

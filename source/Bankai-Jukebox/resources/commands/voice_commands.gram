@@ -1,0 +1,6 @@
+#JSGF V1.0;
+
+grammar music_commands;
+
+public <command> = (play (song | video) <name> | play | pause | stop | next | previous | shuffle);
+public <name> = (.*);

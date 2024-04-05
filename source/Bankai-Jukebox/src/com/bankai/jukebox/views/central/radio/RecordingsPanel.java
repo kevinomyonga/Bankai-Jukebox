@@ -113,6 +113,7 @@ class RecordingsPanelContent extends JPanel implements SearchPanel.SearchListene
                 if (e.getClickCount() == 2) {
                     int selectedRow = table.rowAtPoint(point);
                     if (selectedRow != -1) {
+                        playerPanel.getPlayerControlsPanel();
                         playerPanel.getPlayBackController().play(filteredRecordingFiles.get(selectedRow).getAbsolutePath());
 
                         System.out.println("Recording selected: " + filteredRecordingFiles.get(selectedRow).getName());

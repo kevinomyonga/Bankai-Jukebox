@@ -1,5 +1,7 @@
 package com.bankai.jukebox.views.menu;
 
+import com.bankai.jukebox.pages.HomePage;
+import com.bankai.jukebox.pages.LoginPage;
 import com.bankai.jukebox.views.central.CentralPanel;
 
 import javax.swing.*;
@@ -26,9 +28,10 @@ public class MenuPanel extends JPanel {
     private JLabel moreLabel;
     private JButton settingsBtn;
     private JButton aboutBtn;
+    private JButton logoutBtn;
     private JButton exitBtn;
 
-    public MenuPanel(CentralPanel centralPanel) {
+    public MenuPanel(CentralPanel centralPanel, HomePage homePage) {
         super();
 
         this.setPreferredSize(new Dimension(200, 690));
@@ -84,15 +87,6 @@ public class MenuPanel extends JPanel {
 //        playlistLabel.setForeground(foreground);
         playlistLabel.setBackground(this.getBackground());
         add(playlistLabel);
-
-
-        /*
-          This button creates and adds a new playlist
-         */
-        newPlaylistBtn = new JButton("New Playlist");
-        newPlaylistBtn.setFont(new Font("Arial", Font.BOLD, 12));
-        newPlaylistBtn.setHorizontalAlignment(SwingConstants.LEFT);
-        add(newPlaylistBtn);
 
         /*
           This button shows all existing playlists for user
@@ -172,6 +166,17 @@ public class MenuPanel extends JPanel {
         add(aboutBtn);
 
         add(Box.createRigidArea(new Dimension(0, 1)));
+
+        /*
+          This button logs the user out of the app
+         */
+        logoutBtn = new JButton("Logout");
+        logoutBtn.setFont(new Font("Arial", Font.BOLD, 12));
+        logoutBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        logoutBtn.addActionListener(e -> {
+            homePage.closeFrame();
+        });
+        add(logoutBtn);
 
         /*
           This button exits the app

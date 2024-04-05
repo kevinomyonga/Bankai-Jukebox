@@ -46,8 +46,6 @@ public class VideoPlayer extends JFrame {
             public void windowClosing(WindowEvent e) {
                 // Stop audio as soon as possible
                 mediaPlayerComponent.mediaPlayer().controls().stop();
-                // Release
-//                mediaPlayerComponent.release();
             }
         });
 

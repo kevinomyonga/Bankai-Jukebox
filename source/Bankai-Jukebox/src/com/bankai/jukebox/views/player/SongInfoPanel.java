@@ -1,106 +1,138 @@
 package com.bankai.jukebox.views.player;
 
+import com.bankai.jukebox.Main;
+import com.bankai.jukebox.controllers.PlayBackController;
 import com.bankai.jukebox.views.central.library.VideosPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Objects;
 
 public class SongInfoPanel extends JPanel {
 
-    private JLabel icon;
-    private JLabel title;
-    private JLabel album;
-    private JLabel artist;
+    private PlayerPanel playerPanel;
+
+    private JLabel songImageLabel;
+    private JLabel songNameLabel;
+    private JLabel songAlbumLabel;
+    private JLabel songArtistLabel;
     private JPanel data;
     private Color background;
-//    private Color foreground;
+
     private Font font1;
     private Font font2;
 
-    public SongInfoPanel() {
+    private boolean isPlaying;
+
+
+    private boolean isLiked = false;
+    private ImageIcon likeImage;
+    private ImageIcon disLikeImage;
+    private JLabel dislikeLabel = new JLabel();
+
+    ImageIcon songArtwork;
+
+    public SongInfoPanel(PlayerPanel playerPanel) {
         super();
 //        background = new Color(40, 40, 40);
 //        foreground = Color.white;
+
+        this.playerPanel = playerPanel;
 
         this.setLayout(new GridLayout(1, 2));
 //        this.setBackground(background);
         this.font1 = new Font("Arial", Font.ITALIC, 14);
         this.font2 = new Font("Arial", Font.BOLD, 12);
 
-        icon = new JLabel();
-        icon.setHorizontalAlignment(SwingConstants.CENTER);
-        ImageIcon songArtwork = new ImageIcon(Objects.requireNonNull(
+        songImageLabel = new JLabel();
+        songImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        songArtwork = new ImageIcon(Objects.requireNonNull(
                 VideosPanel.class.getClassLoader().getResource("images/no-artwork.jpg")));
         Image image = songArtwork.getImage(); // transform it
         Image newImg = image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         songArtwork = new ImageIcon(newImg);
-        icon.setIcon(songArtwork);
+        songImageLabel.setIcon(songArtwork);
 //        icon.setForeground(foreground);
-        this.add(icon);
+        this.add(songImageLabel);
+
+        songImageLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                playerPanel.getMiniPlayer().setWindowVisible(true);
+            }
+        });
 
         data = new JPanel();
         data.setPreferredSize(new Dimension(80,30));
         data.setLayout(new BorderLayout());
         data.setBackground(background);
 
-        artist = new JLabel("Artist");
-//        artist.setForeground(foreground);
-        artist.setFont(font2);
-        data.add(artist, BorderLayout.NORTH);
+        songArtistLabel = new JLabel("");
+        songArtistLabel.setFont(font2);
+        data.add(songArtistLabel, BorderLayout.NORTH);
 
-        title = new JLabel("Title");
-//        title.setForeground(foreground);
-        title.setFont(font1);
-        data.add(title, BorderLayout.CENTER);
+        songNameLabel = new JLabel("");
+        songNameLabel.setFont(font1);
+        data.add(songNameLabel, BorderLayout.CENTER);
 
-        album = new JLabel("Album");
-//        album.setForeground(foreground);
-        album.setFont(font2);
-        data.add(album, BorderLayout.SOUTH);
+        songAlbumLabel = new JLabel("");
+        songAlbumLabel.setFont(font2);
+        data.add(songAlbumLabel, BorderLayout.SOUTH);
 
         this.add(data);
     }
 
     /**
-     * updates song information on player
-     * @param artwork
-     * @param title
-     * @param artistName
-     * @param albumName
+     * Updates song information on player
      */
-    public void refresh(byte[] artwork, String title, String artistName, String albumName) {
+    public void updateInformation(){
 
-        icon.setHorizontalAlignment(SwingConstants.CENTER);
-        ImageIcon songArtwork;
-        if (artwork != null) {
-            songArtwork = new ImageIcon(artwork);
+        if(playerPanel.getPlayBackController().getCurrentSong() != null) {
+            //Updating artWork
+            URL songArtWorkUrl;
+            Image songArtWorkImage;
+            ImageIcon songArtWorkIcon = null;
+            try {
+                songArtWorkUrl = playerPanel.getPlayBackController().getCurrentSong().getArtWork().toURL();
+                songArtWorkIcon = new ImageIcon(songArtWorkUrl);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            songArtWorkImage = Objects.requireNonNull(songArtWorkIcon).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+            ImageIcon homeIcon = new ImageIcon(songArtWorkImage);
+            songImageLabel.setIcon(homeIcon);
+            if (Main.user.getLikedSongs().contains(playerPanel.getPlayBackController().getCurrentSong())) {
+                System.out.println(playerPanel.getPlayBackController().getCurrentSong().getTitle());
+                isLiked = true;
+                dislikeLabel.setIcon(likeImage);
+                this.validate();
+                this.repaint();
+            } else {
+                isLiked = false;
+                dislikeLabel.setIcon(disLikeImage);
+                this.validate();
+                this.repaint();
+            }
+
+            //Updating name
+            songNameLabel.setText(playerPanel.getPlayBackController().getCurrentSong().getTitle());
+            //Updating Artist
+            songArtistLabel.setText(playerPanel.getPlayBackController().getCurrentSong().getArtist());
+            //Updating Album
+            songAlbumLabel.setText(playerPanel.getPlayBackController().getCurrentSong().getAlbum());
         } else {
-            songArtwork = new ImageIcon("/Users/apple/Desktop/userIcon.png");
-        }
-        Image image = songArtwork.getImage(); // transform it
-        Image newImg = image.getScaledInstance(43, 43, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-        songArtwork = new ImageIcon(newImg);
-        icon.setIcon(songArtwork);
-        icon.setForeground(Color.white);
-
-        if (title != null) {
-            this.title.setText(title);
-        } else {
-            this.title.setText("Title");
+            songImageLabel.setIcon(songArtwork);
+            //Updating name
+            songNameLabel.setText(playerPanel.getPlayBackController().getMediaPlayer().media().info().mrl());
         }
 
-        if (artistName != null) {
-            this.artist.setText(artistName);
-        } else {
-            this.artist.setText("Artist");
-        }
-
-        if (albumName != null) {
-            this.album.setText(albumName);
-        } else {
-            this.album.setText("Album");
-        }
-
+        isPlaying = true;
     }
 }

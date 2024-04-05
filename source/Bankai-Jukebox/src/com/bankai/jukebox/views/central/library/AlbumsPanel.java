@@ -1,6 +1,11 @@
 package com.bankai.jukebox.views.central.library;
 
 import com.bankai.jukebox.config.Constants;
+import com.bankai.jukebox.models.Album;
+import com.bankai.jukebox.models.Song;
+import com.bankai.jukebox.models.SongTableRow;
+import com.bankai.jukebox.pages.HomePage;
+import com.bankai.jukebox.views.SearchPanel;
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;
 import com.bankai.jukebox.views.video.VideoPlayer;
@@ -8,7 +13,6 @@ import com.bankai.jukebox.views.video.VideoPlayer;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -27,13 +31,15 @@ public class AlbumsPanel extends JPanel {
     }
 }
 
-class AlbumsPanelContent extends JPanel {
+class AlbumsPanelContent extends JPanel implements SearchPanel.SearchListener {
 
-    int WIDTH = 150, HEIGHT = 150;
+    int WIDTH = 200, HEIGHT = 200;
 
     private final PlayerPanel playerPanel;
 
     private ArrayList<File> videoFiles;
+
+    private ArrayList<Album> albums;
 
     public AlbumsPanelContent(PlayerPanel playerPanel) {
         super();
@@ -42,34 +48,11 @@ class AlbumsPanelContent extends JPanel {
 
         this.playerPanel = playerPanel;
 
-        String folderPath = Constants.APP_MUSIC_DIRECTORY; // Change this to your folder path
+        String folderPath = Constants.APP_MUSIC_DIRECTORY;
 
         System.out.println("Folder path used: " + folderPath);
 
-        videoFiles = getVideoFiles(folderPath);
-
-        for (File file : videoFiles) {
-            try {
-                ImageIcon defaultImageIcon = new ImageIcon(Objects.requireNonNull(
-                        VideosPanel.class.getClassLoader().getResource("images/no-artwork.jpg")));
-
-                JButton button = new JButton(defaultImageIcon);
-                button.setPreferredSize(new Dimension(150, 150));
-                button.setText(file.getName());
-                button.setToolTipText(file.getName());
-                button.setVerticalTextPosition(AbstractButton.BOTTOM);
-                button.setHorizontalTextPosition(AbstractButton.CENTER);
-                button.addActionListener(e -> {
-                    ArrayList<File> videoQueue = new ArrayList<>();
-                    videoQueue.add(file);
-                    new VideoPlayer(playerPanel.getMediaPlayerComponent(), videoQueue);
-                });
-
-                add(button);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        filterAlbums("");
 
         setVisible(true);
     }
@@ -97,5 +80,50 @@ class AlbumsPanelContent extends JPanel {
             }
         }
         return false;
+    }
+
+    private void filterAlbums(String searchText) {
+
+        // load all songs
+        albums = HomePage.databaseHandler.searchAlbum(searchText);
+
+        displayAlbums(albums);
+    }
+
+    private void displayAlbums(ArrayList<Album> albums) {
+        for (Album album : albums) {
+            try {
+                ImageIcon defaultImageIcon = new ImageIcon(Objects.requireNonNull(
+                        AlbumsPanel.class.getClassLoader().getResource("images/no-artwork.jpg")));
+
+                Image img = album.getSong(0).getArtWork() != null
+                        ? new ImageIcon(album.getSong(0).getArtWork().toURL()).getImage()
+                        : defaultImageIcon.getImage();
+                Image resizedImg = img.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+                defaultImageIcon = new ImageIcon(resizedImg);
+
+                JButton button = new JButton(defaultImageIcon);
+                button.setPreferredSize(new Dimension(WIDTH, HEIGHT + 50));
+                button.setText(album.getTitle());
+                button.setToolTipText(album.getTitle() + " - " + album.getArtist());
+                button.setVerticalTextPosition(AbstractButton.BOTTOM);
+                button.setHorizontalTextPosition(AbstractButton.CENTER);
+                button.addActionListener(e -> {
+                    playerPanel.getPlayBackController().resetQueue(album.getSongs());
+                    playerPanel.getPlayBackController().setQueueIndex(0);
+                    playerPanel.getPlayBackController().play(album.getSong(0));
+                });
+
+                add(button);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Implementation of SearchPanel.SearchListener
+    @Override
+    public void onSearch(String searchText) {
+        filterAlbums(searchText);
     }
 }

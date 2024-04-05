@@ -1,0 +1,3 @@
+Manifest-Version: 2024.3.1
+Main-Class: com.bankai.jukebox.Main
+

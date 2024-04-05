@@ -4,9 +4,6 @@ import com.bankai.jukebox.models.RadioStation;
 import com.bankai.jukebox.views.TitleText;
 import com.bankai.jukebox.views.player.PlayerPanel;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import javax.imageio.ImageIO;
@@ -68,8 +65,6 @@ class RadioPanelContent extends JPanel {
         try {
             Path path = Paths.get(Objects.requireNonNull(
                     RadioPanel.class.getClassLoader().getResource("data/stations/Kenya.json")).toURI());
-//            Object obj = JsonParser.parseReader(new FileReader(path.toString()));
-//            stations = (JsonArray) obj;
 
             FileReader reader = new FileReader(path.toString());
 
@@ -85,11 +80,6 @@ class RadioPanelContent extends JPanel {
 
     private void displayStations() {
         for (RadioStation radioStation : radioStations) {
-//            JsonObject station = (JsonObject) obj;
-//            String title = station.get("Title").getAsString();
-//            String description = station.get("Description").getAsString();
-//            String logoUrl = station.get("Logo").getAsString();
-//            String source1 = station.get("Source1").getAsString();
             String title = radioStation.getTitle();
             String description = radioStation.getDescription();
             String logoUrl = radioStation.getLogo();
@@ -103,6 +93,10 @@ class RadioPanelContent extends JPanel {
             // (assuming you have images corresponding to stations)
             ImageIcon defaultImageIcon = new ImageIcon(Objects.requireNonNull(
                     RadioPanel.class.getClassLoader().getResource("images/no-artwork.jpg")));
+
+            Image img = defaultImageIcon.getImage();
+            Image resizedImg = img.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+            defaultImageIcon = new ImageIcon(resizedImg);
 
             JButton imageLabel = new JButton(defaultImageIcon);
             imageLabel.setText(title);

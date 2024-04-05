@@ -1,5 +1,6 @@
 package com.bankai.jukebox.config;
 
+import java.io.File;
 import java.time.Year;
 
 /**
@@ -18,12 +19,17 @@ public class Constants {
     /**
      * A constant field to denote the value of APP_DESCRIPTION.
      */
-    public static final String APP_DESCRIPTION = "Virtual Jukebox Simulation Project By The Bankai Group";
+    public static final String APP_DESCRIPTION = "Virtual Jukebox Simulation Project By The Bankai Group For The MIS6030 Class (Spring 2024).";
 
     /**
      * A constant field to denote the value of APP_VERSION.
      */
-    public static final String APP_VERSION = "2024.3.0";
+    public static final String APP_VERSION = "2024.4.0";
+
+    /**
+     * A constant field to denote the value of APP_VERSION.
+     */
+    public static final String APP_VERSION_CODENAME = "Coup De Grâce";
 
     /**
      * A constant field to denote the value of APP_COPYRIGHT.
@@ -33,34 +39,65 @@ public class Constants {
     /**
      * A constant field to denote the value of APP_COPYRIGHT.
      */
-    public static final String APP_DEV_TEAM = "Kevin Omyonga |\n" +
-            "Billy Nelson Omingo |\n" +
-            "Brian John Onsati |\n" +
-            "Leonard Ochieng Omondi |\n" +
-            "Wellingtone Wekesa Luvonga";
+    public static final String APP_DEV_TEAM = """
+            Kevin Nyende Omyonga |
+            Billy Nelson Omingo |
+            Brian John Onsati |
+            Leonard Ochieng Omondi |
+            Wellingtone Wekesa Luvonga""";
 
     /**
      * A constant field to denote the value of APP_DIRECTORY.
      */
-    public static final String APP_DIRECTORY = System.getProperty("user.home") + "/" + APP_NAME.replace(" ", "");
+    public static final String APP_DIRECTORY = System.getProperty("user.home") + File.separator + APP_NAME.replace(" ", "");
 
     /**
      * A constant field to denote the value of APP_MUSIC_DIRECTORY.
      */
-    public static final String APP_MUSIC_DIRECTORY = APP_DIRECTORY + "/Music";
+    public static final String APP_MUSIC_DIRECTORY = APP_DIRECTORY + File.separator + "Music";
 
     /**
-     * A constant field to denote the value of APP_RECORDINGS_DIRECTORY.
+     * A constant field to denote the value of APP_MUSIC_ARTWORK_DIRECTORY.
      */
-    public static final String APP_RECORDINGS_DIRECTORY = APP_DIRECTORY + "/Recordings";
+    public static final String APP_MUSIC_ARTWORK_DIRECTORY = APP_MUSIC_DIRECTORY + File.separator + "Artwork";
 
     /**
      * A constant field to denote the value of APP_VIDEOS_DIRECTORY.
      */
-    public static final String APP_VIDEOS_DIRECTORY = APP_DIRECTORY + "/Videos";
+    public static final String APP_VIDEOS_DIRECTORY = APP_DIRECTORY + File.separator + "Videos";
+
+    /**
+     * A constant field to denote the value of APP_VIDEO_THUMBNAILS_DIRECTORY.
+     */
+    public static final String APP_VIDEO_THUMBNAILS_DIRECTORY = APP_VIDEOS_DIRECTORY + File.separator + "Thumbnails";
+
+    /**
+     * A constant field to denote the value of APP_RADIO_DIRECTORY.
+     */
+    public static final String APP_RADIO_DIRECTORY = APP_DIRECTORY + File.separator + "Radio";
+
+    /**
+     * A constant field to denote the value of APP_RECORDINGS_DIRECTORY.
+     */
+    public static final String APP_RECORDINGS_DIRECTORY = APP_RADIO_DIRECTORY + File.separator + "Recordings";
+
+    /**
+     * A constant field to denote the value of APP_RADIO_THUMBNAILS_DIRECTORY.
+     */
+    public static final String APP_RADIO_THUMBNAILS_DIRECTORY = APP_RADIO_DIRECTORY + File.separator + "Thumbnails";
 
     /**
      * A constant field to denote the value of APP_WINDOW_PREFERRED_WIDTH and APP_WINDOW_PREFERRED_HEIGHT.
      */
     public static final int APP_WINDOW_PREFERRED_WIDTH = 1280, APP_WINDOW_PREFERRED_HEIGHT = 800;
+
+    /**
+     * A constant field to denote the value of APP_DB_NAME.
+     */
+    public static final String APP_DB_NAME = APP_NAME.replace(" ", "");
+
+    /**
+     * A constant field to denote the value of LYRICS_API_KEY.
+     */
+    public static final String LYRICS_API_KEY = "5c816ea1678c68472364e0d23f9e4302";
 }
