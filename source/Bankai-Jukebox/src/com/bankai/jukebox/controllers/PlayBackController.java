@@ -1,5 +1,8 @@
 package com.bankai.jukebox.controllers;
 
+import com.bankai.jukebox.config.Constants;
+import com.bankai.jukebox.experimental.StreamHttp;
+import com.bankai.jukebox.experimental.StreamRTP;
 import com.bankai.jukebox.models.Song;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
@@ -56,6 +59,17 @@ public class PlayBackController {
         if (songQueue.contains(songInQueue)){
             queueIndex = songQueue.indexOf(songInQueue);
             mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
+
+//            try {
+//                System.out.println("Begin Streaming APP");
+//                StreamHttp http = new StreamHttp();
+//                http.start(new File(
+//                        songInQueue.getLocation()).getAbsolutePath());
+//                System.out.println("End Streaming APP");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
         }else{
             songQueue.add(queueIndex, songInQueue);
             mediaPlayer.media().play(new File(songInQueue.getLocation()).getAbsolutePath());
