@@ -12,7 +12,10 @@ Virtual Jukebox Simulation Project By The Bankai Group. For The MIS6030 Class (S
 
 ## Tools
 
-GitHub, Figma, WhatsApp
+1.  Java Swing
+2.  GitHub
+3.  Figma
+4.  WhatsApp
 
 ## Screenshots
 
