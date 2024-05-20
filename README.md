@@ -17,6 +17,18 @@ Virtual Jukebox Simulation Project By The Bankai Group. For The MIS6030 Class (S
 3.  Figma
 4.  WhatsApp
 
+## Features included:
+
+- Audio playback
+- Loopable playlist
+- Now playing indicator
+- Progress indicator
+- Play counter
+- Video playback
+- Local radio channel streaming
+- Radio stream recording
+- Lyrics generation
+
 ## Screenshots
 
 ![alt Screenshot1](https://github.com/kevinomyonga/Bankai-Jukebox/blob/main/screenshots/Screenshot%202024-04-05%20at%2015.52.45.png)
